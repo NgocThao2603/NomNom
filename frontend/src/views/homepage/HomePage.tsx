@@ -1,12 +1,13 @@
-import { Box, IconButton } from '@mui/material';
-import SearchItem from './components/SearchItem';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AllItem from './components/AllItem.tsx';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState } from 'react';
-import { useModalContext } from 'src/contexts/modal-context/modal-context.tsx';
+import { Box, IconButton } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchItem from './components/SearchItem';
 import FilterModal from './components/FilterModal.tsx';
+import AllItem from './components/AllItem.tsx';
+import CategoryFilter from './components/CategoryFilter.tsx';
 import { Dish, dishes, Restaurant, restaurants } from 'src/constants/data.ts';
+import { useModalContext } from 'src/contexts/modal-context/modal-context.tsx';
 
 export type Filter = {
   categories?: number[];
@@ -14,6 +15,7 @@ export type Filter = {
   caloriesRange?: { min?: string; max?: string };
 };
 
+// Add distances to dishes
 function addDistanceToDishes(restaurants: Restaurant[], dishes: Dish[]): Dish[] {
   const restaurantMap = new Map<number, number>();
   restaurants.forEach((restaurant) => {
@@ -43,11 +45,24 @@ export default function HomePage() {
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filters, setFilters] = useState<Filter>(initFilters);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+
+  const handleCategoryToggle = (id: number) => {
+    const updatedCategories = selectedCategories.includes(id) ? selectedCategories.filter((catId) => catId !== id) : [...selectedCategories, id];
+
+    setSelectedCategories(updatedCategories);
+    setFilters((prev) => ({ ...prev, categories: updatedCategories }));
+  };
 
   const handleSearch = (keyword: string) => {
     setFilters(initFilters);
     setSearchKeyword(keyword.toLowerCase());
   };
+
+  // const resetCategories = () => {
+  //   setSelectedCategories([]);
+  //   setFilters((prev) => ({ ...prev, categories: [] }));
+  // };
 
   function handleOpenModal() {
     setSearchKeyword('');
@@ -60,9 +75,9 @@ export default function HomePage() {
       (filters.categories && filters.categories.length > 0) ||
       (filters.priceRange && (filters.priceRange.min || filters.priceRange.max)) ||
       (filters.caloriesRange && (filters.caloriesRange.min || filters.caloriesRange.max));
-    if (!hasFilters) {
-      return undefined;
-    }
+
+    if (!hasFilters) return undefined;
+
     return dishes.filter((dish) => {
       if (searchKeyword && !dish.dish_name.toLowerCase().includes(searchKeyword)) {
         return false;
@@ -85,24 +100,28 @@ export default function HomePage() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mt: 3,
-        }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
         <IconButton onClick={handleOpenModal}>
           <FilterListIcon sx={{ fontSize: '30px' }} />
         </IconButton>
         <Box sx={{ px: 2, width: '100%' }}>
           <SearchItem onSearch={handleSearch} />
         </Box>
-        <IconButton>
+        <IconButton aria-label="View shopping cart">
           <ShoppingCartIcon sx={{ fontSize: '30px' }} />
         </IconButton>
       </Box>
+
+      {selectedCategories.length > 0 ||
+      searchKeyword ||
+      (filters.categories && filters.categories.length > 0) ||
+      (filters.priceRange && (filters.priceRange.min || filters.priceRange.max)) ||
+      (filters.caloriesRange && (filters.caloriesRange.min || filters.caloriesRange.max)) ? (
+        <></>
+      ) : (
+        <CategoryFilter selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} />
+      )}
+
       <AllItem Item={filterItems(updatedDishes, searchKeyword, filters)} />
     </Box>
   );
