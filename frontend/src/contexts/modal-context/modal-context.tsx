@@ -10,7 +10,7 @@ interface ModalContextInterface {
   title: ReactNode;
   content: ReactNode;
   closeModal: () => void;
-  openModal: (title: ReactNode, content: ReactNode, op?: TOptions, openNoCondition?: boolean, checkConnectedBSC?: boolean, checkConnectedOraichain?: boolean) => void;
+  openModal: (title: ReactNode, content: ReactNode, op?: TOptions, openNoCondition?: boolean) => void;
   options: TOptions;
 }
 
