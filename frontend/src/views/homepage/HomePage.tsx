@@ -1,28 +1,30 @@
-import { Box, Grid } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import SearchItem from './components/SearchItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AllItem from './components/AllItem.tsx';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 export default function HomePage() {
   return (
     <Box>
-      <Grid
-        container
+      <Box
         sx={{
+          display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mt: 2,
+          mt: 3,
         }}
       >
-        <Grid item xs={11}>
-          <Box sx={{ px: 2 }}>
-            <SearchItem />
-          </Box>
-        </Grid>
-        <Grid item xs={1}>
-          <ShoppingCartIcon sx={{ fontSize: '27px' }} />
-        </Grid>
-      </Grid>
+        <IconButton>
+          <FilterListIcon sx={{ fontSize: '30px' }} />
+        </IconButton>
+        <Box sx={{ px: 2, width: '100%' }}>
+          <SearchItem />
+        </Box>
+        <IconButton>
+          <ShoppingCartIcon sx={{ fontSize: '30px' }} />
+        </IconButton>
+      </Box>
       <AllItem />
     </Box>
   );
