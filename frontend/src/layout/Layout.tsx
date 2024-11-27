@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import Providers from 'src/contexts/Providers';
 import Header from './header/Header';
 import Content from './content/Content';
+import ModalCustom from './ModalCustom/ModalCustom';
 
 export default function Layout() {
   const headerHeight = '66px';
@@ -11,6 +12,7 @@ export default function Layout() {
         <Header />
         <Content headerHeight={headerHeight} />
       </Box>
+      <ModalCustom />
     </Providers>
   );
 }
