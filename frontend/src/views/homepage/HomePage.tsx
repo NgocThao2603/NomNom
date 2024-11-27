@@ -1,7 +1,7 @@
 import { Box, Grid } from '@mui/material';
 import SearchItem from './components/SearchItem';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import CardItem from './components/CardItem';
+import AllItem from './components/AllItem.tsx';
 
 export default function HomePage() {
   return (
@@ -20,10 +20,10 @@ export default function HomePage() {
           </Box>
         </Grid>
         <Grid item xs={1}>
-          <ShoppingCartIcon />
+          <ShoppingCartIcon sx={{ fontSize: '27px' }} />
         </Grid>
       </Grid>
-      <CardItem />
+      <AllItem />
     </Box>
   );
 }

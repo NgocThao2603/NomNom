@@ -15,7 +15,7 @@ export default function SearchItem() {
         onChange={(e) => setEditKeyword(e.target.value)}
         placeholder="Search food"
         InputProps={{
-          endAdornment: <SearchIcon fontSize="small" />,
+          endAdornment: <SearchIcon fontSize="large" />,
         }}
       />
     </Box>
