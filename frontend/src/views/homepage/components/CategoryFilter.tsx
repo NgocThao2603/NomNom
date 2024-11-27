@@ -33,7 +33,7 @@ export default function CategoryFilter({ onCategoryToggle }: CategoryFilterProps
             }}
             onClick={() => onCategoryToggle(category.id)}
           >
-            <Card sx={{ minHeight: '270px' }}>
+            <Card>
               <CardActionArea>
                 <CardMedia component="img" height="190" image={category.img_url} alt={category.category} />
                 <CardContent>

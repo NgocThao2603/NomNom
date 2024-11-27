@@ -13,7 +13,7 @@ type CardItemProps = {
 export default function CardItem({ name, price, img_url, average_rating, distance }: CardItemProps) {
   return (
     <Card sx={{ maxWidth: 300, mt: 5, height: '400px', maxHeight: '400px' }}>
-      <CardMedia sx={{ height: 200 }} image={img_url} title="pizza" />
+      <CardMedia sx={{ height: 200 }} image={img_url} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{ height: '60px' }}>
           {name}
