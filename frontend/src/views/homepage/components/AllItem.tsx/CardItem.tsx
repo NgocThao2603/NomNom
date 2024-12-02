@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import { formatNumber } from 'src/utils/format';
 import StarIcon from '@mui/icons-material/Star';
 
@@ -12,7 +12,7 @@ type CardItemProps = {
 
 export default function CardItem({ name, price, img_url, average_rating, distance }: CardItemProps) {
   return (
-    <Card sx={{ maxWidth: 300, mt: 5, height: '400px', maxHeight: '400px' }}>
+    <Card sx={{ maxWidth: 300, mt: 2, height: '350px', maxHeight: '350px', cursor: 'pointer' }}>
       <CardMedia sx={{ height: 200 }} image={img_url} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{ height: '60px' }}>
@@ -31,11 +31,11 @@ export default function CardItem({ name, price, img_url, average_rating, distanc
           </Typography>
         </Box>
       </CardContent>
-      <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+      {/* <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
         <Button size="small" variant="contained">
           Show More
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }
