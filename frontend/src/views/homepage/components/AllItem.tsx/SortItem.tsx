@@ -76,10 +76,10 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
             </Select>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button variant={selectedFilters.closest ? 'contained' : 'outlined'} onClick={() => handleButtonClick('closest')} sx={{ color: '#000' }}>
+            <Button variant={selectedFilters.closest ? 'contained' : 'outlined'} onClick={() => handleButtonClick('closest')}>
               Closest
             </Button>
-            <Button variant={selectedFilters.highestRated ? 'contained' : 'outlined'} onClick={() => handleButtonClick('highestRated')} sx={{ color: '#000' }}>
+            <Button variant={selectedFilters.highestRated ? 'contained' : 'outlined'} onClick={() => handleButtonClick('highestRated')}>
               Highest Rated
             </Button>
           </Box>
@@ -87,7 +87,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
       </Box>
       {Item.length === 0 && (
         <Typography variant="h6" sx={{ mt: 10, textAlign: 'center' }}>
-          No items found
+          No dishes match your search
         </Typography>
       )}
       <Grid container spacing={2}>
