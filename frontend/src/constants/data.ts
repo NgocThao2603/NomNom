@@ -4,7 +4,7 @@ export interface Category {
   img_url?: string;
 }
 
-const categories: Category[] = [
+export const categories: Category[] = [
   { img_url: 'https://i.pinimg.com/736x/70/83/b7/7083b797ace1ccefb8517c5cd0cd4b74.jpg', id: 1, category: 'Món cơm' },
   { img_url: 'https://i.pinimg.com/736x/11/ee/7a/11ee7af5bc5ca03b5ceda6af7a88a85d.jpg', id: 2, category: 'Món mì, phở, bún' },
   { img_url: 'https://i.pinimg.com/736x/61/d4/08/61d4087e66315e779e7f6bb496c3464c.jpg', id: 3, category: 'Món xôi, bánh bao' },

@@ -8,8 +8,8 @@ export type Dish = {
   category_id: number;
   distance: string;
   res_address: string;
-  rating: string;
-  comment: string;
+  rating: string | null;
+  comment: string | null;
 };
 
 export type Item = {

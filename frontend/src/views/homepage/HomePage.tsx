@@ -4,7 +4,7 @@ import AllItem from '../../components/Items/AllItem.tsx';
 import CategoryFilter from './components/CategoryFilter.tsx';
 import { Dish, initFilters } from 'src/services/types.ts';
 import SearchBar from 'src/components/SearchBar/SearchBar.tsx';
-import { getAllItem, getItemByFilters, getItemByKeyword } from 'src/services/index.tsx';
+import { getAllItem } from 'src/services/index.tsx';
 
 export type Filter = {
   categories?: number[];
@@ -24,6 +24,12 @@ export default function HomePage() {
     setSelectedCategories(updatedCategories);
     setFilters((prev) => ({ ...prev, categories: updatedCategories }));
   };
+
+  // useEffect(() => {
+  //   async function getItemsByFilters() {
+  //     const response = await getItemsByFilters()  ;
+  //   }
+  // }, [filters]);
 
   useEffect(() => {
     async function getItems() {
