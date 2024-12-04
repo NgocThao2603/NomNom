@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { categories } from 'src/constants/data';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
-import { Filter } from '../HomePage';
+import { Filter } from '../../views/homepage/HomePage';
 
 interface FilterModalProps {
   setFilters: (filters: Filter) => void;

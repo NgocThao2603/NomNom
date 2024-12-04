@@ -1,8 +1,9 @@
 import { Box, Button, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Dish } from 'src/constants/data';
-import CardItem from './CardItem';
+import CardItem from '../CartItem/CardItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Dish } from 'src/services/types';
+import { useNavigate } from 'react-router-dom';
 
 type SortOption = 'Low to High' | 'High to Low';
 type SelectedFilters = {
@@ -11,10 +12,11 @@ type SelectedFilters = {
 };
 
 export default function SortItem({ Item }: { Item: Dish[] }) {
+  const navigate = useNavigate();
   const [sortOption, setSortOption] = useState<SortOption>('Low to High');
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     closest: false,
-    highestRated: true,
+    highestRated: false,
   });
 
   const sortedData = () => {
@@ -27,11 +29,11 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
     }
 
     if (selectedFilters.closest) {
-      filteredItems.sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
+      filteredItems.sort((a, b) => Number(a.distance) - Number(b.distance));
     }
 
     if (selectedFilters.highestRated) {
-      filteredItems.sort((a, b) => b.average_rating - a.average_rating);
+      filteredItems.sort((a, b) => Number(b.average_rating) - Number(a.average_rating));
     }
 
     return filteredItems;
@@ -46,7 +48,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <IconButton sx={{ mt: 2 }} onClick={() => window.history.back()}>
+        <IconButton sx={{ mt: 2 }} onClick={() => navigate('/home')}>
           <ArrowBackIcon sx={{ fontSize: 32, cursor: 'pointer' }} />
         </IconButton>
         <Box
@@ -93,7 +95,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
       <Grid container spacing={2}>
         {sortedData().map((item, index) => (
           <Grid item xs={6} sm={4} md={3} key={index}>
-            <CardItem name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={item.average_rating} distance={item.distance ? item.distance : 0} />
+            <CardItem name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={item.average_rating} distance={item.distance} />
           </Grid>
         ))}
       </Grid>
