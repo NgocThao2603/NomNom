@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import { useState, useMemo } from 'react';
+import { Box, Pagination, Typography } from '@mui/material';
+import { useState, useMemo, useEffect } from 'react';
 import SortItem from 'src/components/Items/SortItem';
 import SearchBar from 'src/components/SearchBar/SearchBar';
 import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
@@ -8,6 +8,9 @@ import { Dish } from 'src/services/types';
 
 export default function FilterPage() {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(20);
+
   const { filters, setFilters } = useFilter();
   const { data: items, status } = useItems();
 
@@ -29,10 +32,30 @@ export default function FilterPage() {
     });
   }, [items, filters, status]);
 
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredItems]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <Box>
       <SearchBar searchKeyword={searchKeyword} filters={filters} setFilters={setFilters} setSearchKeyword={setSearchKeyword} />
-      <SortItem Item={filteredItems} />
+      {paginatedItems.length > 0 ? (
+        <>
+          <SortItem Item={paginatedItems} />
+          <Pagination count={Math.ceil(filteredItems.length / itemsPerPage)} page={currentPage} onChange={handlePageChange} color="primary" sx={{ mt: 2, display: 'flex', justifyContent: 'center' }} />
+        </>
+      ) : (
+        <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
+          No items found.
+        </Typography>
+      )}
     </Box>
   );
 }

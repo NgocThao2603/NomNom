@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Dish, Item } from 'src/services/types.ts';
+import { Item } from 'src/services/types.ts';
 import { getAllItem } from 'src/services/index.tsx';
-import { set } from 'date-fns';
 
 const ItemContext = createContext<Item>({ status: 'idle', data: [] });
 
@@ -15,6 +14,7 @@ export const ItemProvider = ({ children }: { children: React.ReactNode }) => {
       setItem({ status: 'success', data: response.data });
     } catch (error) {
       setItem({ status: 'failed', data: [] });
+      console.error(error);
     }
   }
 
@@ -25,4 +25,5 @@ export const ItemProvider = ({ children }: { children: React.ReactNode }) => {
   return <ItemContext.Provider value={item}>{children}</ItemContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useItems = () => useContext(ItemContext);
