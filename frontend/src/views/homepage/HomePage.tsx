@@ -1,49 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box } from '@mui/material';
 import AllItem from '../../components/Items/AllItem.tsx';
 import CategoryFilter from './components/CategoryFilter.tsx';
-import { Dish, initFilters } from 'src/services/types.ts';
 import SearchBar from 'src/components/SearchBar/SearchBar.tsx';
-import { getAllItem } from 'src/services/index.tsx';
-
-export type Filter = {
-  categories?: number[];
-  priceRange?: { min?: string; max?: string };
-  caloriesRange?: { min?: string; max?: string };
-};
+import { useItems } from 'src/contexts/item-context/ItemContext.tsx';
+import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [filters, setFilters] = useState<Filter>(initFilters);
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const [item, setItem] = useState<Dish[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number>();
+  const items = useItems();
+  const navigate = useNavigate();
+  const { filters, setFilters } = useFilter();
 
   const handleCategoryToggle = (id: number) => {
-    const updatedCategories = selectedCategories.includes(id) ? selectedCategories.filter((catId) => catId !== id) : [...selectedCategories, id];
-
-    setSelectedCategories(updatedCategories);
-    setFilters((prev) => ({ ...prev, categories: updatedCategories }));
+    navigate('/home/filter');
+    setSelectedCategories(id);
+    setFilters({ ...filters, categories: [id] });
   };
-
-  // useEffect(() => {
-  //   async function getItemsByFilters() {
-  //     const response = await getItemsByFilters()  ;
-  //   }
-  // }, [filters]);
-
-  useEffect(() => {
-    async function getItems() {
-      const response = await getAllItem();
-      setItem(response.data);
-    }
-    getItems();
-  }, []);
 
   return (
     <Box>
       <SearchBar searchKeyword={searchKeyword} filters={filters} setFilters={setFilters} setSearchKeyword={setSearchKeyword} />
-      <CategoryFilter selectedCategories={selectedCategories} onCategoryToggle={handleCategoryToggle} />
-      <AllItem Item={item} />
+      <CategoryFilter onCategoryToggle={handleCategoryToggle} />
+      <AllItem Item={items} />
     </Box>
   );
 }

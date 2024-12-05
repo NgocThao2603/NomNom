@@ -2,12 +2,14 @@ import { Box, Button, Container, IconButton, Menu, MenuItem, Select, Typography 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HelpIcon from '@mui/icons-material/Help';
 import LanguageIcon from '@mui/icons-material/Language';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
     <Box sx={{ py: 2, borderBottom: '1px solid #000' }}>
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box onClick={() => window.location.reload()} sx={{ cursor: 'pointer' }}>
+        <Box onClick={() => navigate('/home')} sx={{ cursor: 'pointer' }}>
           <Typography variant="h4">NomNom</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>

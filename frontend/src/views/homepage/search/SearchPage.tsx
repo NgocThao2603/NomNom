@@ -1,29 +1,31 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import SearchBar from 'src/components/SearchBar/SearchBar.tsx';
 import { useState, useEffect } from 'react';
-import { Filter } from '../HomePage.tsx';
-import { Dish, initFilters } from 'src/services/types.ts';
+import { Item } from 'src/services/types.ts';
 import SortItem from 'src/components/Items/SortItem.tsx';
 import { useParams } from 'react-router-dom';
 import { getItemByKeyword } from 'src/services/index.tsx';
+import { IconSpinLoading } from 'src/assets/icon.tsx';
+import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 
 export default function SearchPage() {
   const { keyword } = useParams<{ keyword: string }>();
 
   const [searchKeyword, setSearchKeyword] = useState(keyword || '');
-  const [filters, setFilters] = useState<Filter>(initFilters);
-  const [item, setItem] = useState<Dish[]>([]);
+  const { filters, setFilters } = useFilter();
+  const [item, setItem] = useState<Item>({ status: 'idle', data: [] });
 
   async function getItem(keyword: string) {
     try {
+      setItem({ status: 'fetching', data: [] });
       const response = await getItemByKeyword(keyword);
       if (response.data.success == true) {
-        setItem(response.data.data);
+        setItem({ status: 'success', data: response.data.data });
       } else if (response.data.success == false) {
-        setItem([]);
+        setItem({ status: 'failed', data: [] });
       }
     } catch (error) {
-      setItem([]);
+      setItem({ status: 'failed', data: [] });
       throw error;
     }
   }
@@ -38,7 +40,13 @@ export default function SearchPage() {
   return (
     <Box>
       <SearchBar searchKeyword={searchKeyword} filters={filters} setFilters={setFilters} setSearchKeyword={setSearchKeyword} />
-      <SortItem Item={item} />
+      {(item.status == 'fetching' || item.status == 'idle') && <IconSpinLoading sx={{ fontSize: '100px', mt: 10 }} />}
+      {item.status == 'failed' && (
+        <Typography variant="h6" sx={{ mt: 10, textAlign: 'center' }}>
+          No dishes match your search
+        </Typography>
+      )}
+      {item.status == 'success' && <SortItem Item={item.data} />}
     </Box>
   );
 }

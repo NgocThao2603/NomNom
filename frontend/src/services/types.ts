@@ -13,7 +13,7 @@ export type Dish = {
 };
 
 export type Item = {
-  status: string;
+  status: 'idle' | 'success' | 'fetching' | 'failed';
   data: Dish[];
 };
 

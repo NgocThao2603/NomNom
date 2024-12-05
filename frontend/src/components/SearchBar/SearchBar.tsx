@@ -24,7 +24,7 @@ export default function SearchBar(props: SearchBarProps) {
 
   function handleOpenModal() {
     setSearchKeyword('');
-    openModal('Filter', <FilterModal setFilters={setFilters} />, { maxWidth: 'xsm' }, true);
+    openModal('Filter', <FilterModal />, { maxWidth: 'xsm' }, true);
   }
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>

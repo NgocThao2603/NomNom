@@ -3,14 +3,13 @@ import { useState } from 'react';
 import { categories } from 'src/constants/data';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
-import { Filter } from '../../views/homepage/HomePage';
+import { useNavigate } from 'react-router-dom';
+import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 
-interface FilterModalProps {
-  setFilters: (filters: Filter) => void;
-}
-
-export default function FilterModal({ setFilters }: FilterModalProps) {
+export default function FilterModal() {
   const { closeModal } = useModalContext();
+  const navigate = useNavigate();
+  const { setFilters } = useFilter();
 
   const [showAll, setShowAll] = useState<boolean>(false);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -51,6 +50,7 @@ export default function FilterModal({ setFilters }: FilterModalProps) {
       caloriesRange: { min: caloriesMin, max: caloriesMax },
     };
     setFilters(filters);
+    navigate('/home/filter');
     closeModal();
   };
 
