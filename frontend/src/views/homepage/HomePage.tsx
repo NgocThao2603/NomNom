@@ -8,6 +8,7 @@ import AllItem from './components/AllItem.tsx';
 import CategoryFilter from './components/CategoryFilter.tsx';
 import { Dish, dishes, Restaurant, restaurants } from 'src/constants/data.ts';
 import { useModalContext } from 'src/contexts/modal-context/modal-context.tsx';
+import { useLocation } from 'react-router-dom';
 
 export type Filter = {
   categories?: number[];
@@ -35,6 +36,8 @@ function addDistanceToDishes(restaurants: Restaurant[], dishes: Dish[]): Dish[] 
 export const updatedDishes = addDistanceToDishes(restaurants, dishes);
 
 export default function HomePage() {
+  const location = useLocation();
+
   const { openModal } = useModalContext();
 
   const initFilters: Filter = {
@@ -44,7 +47,7 @@ export default function HomePage() {
   };
 
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [filters, setFilters] = useState<Filter>(initFilters);
+  const [filters, setFilters] = useState<Filter>(location.state?.filters || initFilters);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
   const handleCategoryToggle = (id: number) => {
