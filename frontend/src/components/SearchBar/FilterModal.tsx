@@ -3,14 +3,13 @@ import { useState } from 'react';
 import { categories } from 'src/constants/data';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
-import { Filter } from '../HomePage';
+import { useNavigate } from 'react-router-dom';
+import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 
-interface FilterModalProps {
-  setFilters: (filters: Filter) => void;
-}
-
-export default function FilterModal({ setFilters }: FilterModalProps) {
+export default function FilterModal() {
   const { closeModal } = useModalContext();
+  const navigate = useNavigate();
+  const { setFilters } = useFilter();
 
   const [showAll, setShowAll] = useState<boolean>(false);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -18,6 +17,8 @@ export default function FilterModal({ setFilters }: FilterModalProps) {
   const [priceMax, setPriceMax] = useState<string>('');
   const [caloriesMin, setCaloriesMin] = useState<string>('');
   const [caloriesMax, setCaloriesMax] = useState<string>('');
+  const [priceError, setPriceError] = useState<string>('');
+  const [caloriesError, setCaloriesError] = useState<string>('');
 
   const handleShowMore = () => {
     setShowAll(true);
@@ -28,12 +29,28 @@ export default function FilterModal({ setFilters }: FilterModalProps) {
   };
 
   const handleApply = () => {
+    let hasError = false;
+    if (parseFloat(priceMin) > parseFloat(priceMax)) {
+      setPriceError('Max price should be greater than Min price');
+      hasError = true;
+    } else {
+      setPriceError('');
+    }
+    if (parseFloat(caloriesMin) > parseFloat(caloriesMax)) {
+      setCaloriesError('Max calories should be greater than Min calories');
+      hasError = true;
+    } else {
+      setCaloriesError('');
+    }
+    if (hasError) return;
+
     const filters = {
       categories: selectedCategories,
       priceRange: { min: priceMin, max: priceMax },
       caloriesRange: { min: caloriesMin, max: caloriesMax },
     };
     setFilters(filters);
+    navigate('/home/filter');
     closeModal();
   };
 
@@ -60,12 +77,22 @@ export default function FilterModal({ setFilters }: FilterModalProps) {
         -
         <Input type="number" placeholder="Max (kVNĐ)" sx={{ width: '45%' }} value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
       </Box>
+      {priceError && (
+        <Typography color="error" sx={{ mt: 1 }}>
+          {priceError}
+        </Typography>
+      )}
       <Typography sx={{ mt: 2, mb: 1 }}>Calories Range</Typography>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Input type="number" placeholder="Min" sx={{ width: '45%' }} value={caloriesMin} onChange={(e) => setCaloriesMin(e.target.value)} />
         -
         <Input type="number" placeholder="Max" sx={{ width: '45%' }} value={caloriesMax} onChange={(e) => setCaloriesMax(e.target.value)} />
       </Box>
+      {caloriesError && (
+        <Typography color="error" sx={{ mt: 1 }}>
+          {caloriesError}
+        </Typography>
+      )}
       <Box sx={{ textAlign: 'center' }}>
         <Button variant="contained" sx={{ mt: 3 }} onClick={handleApply}>
           Apply
