@@ -95,7 +95,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
       <Grid container spacing={2}>
         {sortedData().map((item) => (
           <Grid item xs={6} sm={4} md={2.4} key={item.id}>
-            <CardItem name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={item.average_rating} distance={item.distance} />
+            <CardItem id={item.id} name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={item.average_rating} distance={item.distance} />
           </Grid>
         ))}
       </Grid>
