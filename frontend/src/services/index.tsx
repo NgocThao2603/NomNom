@@ -13,3 +13,8 @@ export async function getItemByFilters(category_id?: number, minPrice?: number, 
 export async function getAllItem() {
   return await axios.get(getApi(`/api/dishes`));
 }
+
+export async function getDishById(id: string | undefined) {
+  if (!id) throw new Error('Dish ID is required');
+  return await axios.get(getApi(`/api/dishes/${id}`));
+}

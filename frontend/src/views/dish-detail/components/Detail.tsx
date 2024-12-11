@@ -26,8 +26,7 @@ interface DetailProps {
 const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
-  const [open, setOpen] = useState<boolean>(false); // Snackbar state
-
+  const [open, setOpen] = useState<boolean>(false);
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
   };
@@ -55,7 +54,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       if (totalDishes !== undefined) {
         localStorage.setItem('totalDishes', totalDishes.toString());
         updateTotalDishes(totalDishes);
-        setOpen(true); // Show Snackbar after successful addition to cart
+        setOpen(true);
       } else {
         console.error('Failed to retrieve total_dishes from response');
       }
@@ -65,7 +64,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   };
 
   const handleCloseSnackbar = () => {
-    setOpen(false); // Close Snackbar
+    setOpen(false);
   };
 
   return (

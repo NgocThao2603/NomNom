@@ -4,7 +4,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import Detail from './components/Detail';
 import Feedback from './components/Feedback';
 import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
-import axios from 'axios';
+import { getDishById } from 'src/services/index.tsx';
 
 const DishDetail = () => {
   const { id } = useParams<{ id?: string }>();
@@ -17,7 +17,7 @@ const DishDetail = () => {
   useEffect(() => {
     const fetchDish = async () => {
       try {
-        const response = await axios.get(`https://nomnom-pmp0.onrender.com/api/dishes/${id}`);
+        const response = await getDishById(id);
         setDish(response.data[0]);
       } catch (error) {
         console.error('Error fetching dish:', error);
