@@ -42,17 +42,17 @@ CREATE PROCEDURE GetCartItemsByUser(IN userId INT)
 BEGIN
     -- Lấy các món ăn trong giỏ hàng của người dùng
     SELECT 
-        dishes.id, 
-        dishes.dish_name, 
-        dishes.desrip, 
-        dishes.price, 
-        dishes.calories,
-        dishes.img_url, 
-        cart_items.quantity
-    FROM cart_items 
-    JOIN dishes ON dishes.id = cart_items.dish_id
-    WHERE cart_items.user_id = userId
-    ORDER BY cart_items.id DESC;
+        Dishes.id, 
+        Dishes.dish_name, 
+        Dishes.desrip, 
+        Dishes.price, 
+        Dishes.calories,
+        Dishes.img_url, 
+        Cart_items.quantity
+    FROM Cart_items 
+    JOIN Dishes ON Dishes.id = Cart_items.dish_id
+    WHERE Cart_items.user_id = userId
+    ORDER BY Cart_items.id DESC;
 END $$
 
 DELIMITER ;
@@ -70,19 +70,19 @@ CREATE PROCEDURE `AddOrUpdateCartItem`(
 )
 BEGIN
     -- Thêm hoặc cập nhật món ăn trong giỏ hàng
-    IF EXISTS (SELECT 1 FROM `cart_items` WHERE `user_id` = p_user_id AND `dish_id` = p_dish_id) THEN
-        UPDATE `cart_items`
-        SET `quantity` = `quantity` + p_quantity
-        WHERE `user_id` = p_user_id AND `dish_id` = p_dish_id;
+    IF EXISTS (SELECT 1 FROM Cart_items WHERE user_id = p_user_id AND dish_id = p_dish_id) THEN
+        UPDATE Cart_items
+        SET quantity = quantity + p_quantity
+        WHERE user_id = p_user_id AND dish_id = p_dish_id;
     ELSE
-        INSERT INTO `cart_items` (`user_id`, `dish_id`, `quantity`)
+        INSERT INTO Cart_items (user_id, dish_id, quantity)
         VALUES (p_user_id, p_dish_id, p_quantity);
     END IF;
 
     -- Trả về số lần món ăn xuất hiện trong giỏ hàng
     SELECT COUNT(DISTINCT dish_id) AS total_dishes
-    FROM `cart_items`
-    WHERE `user_id` = p_user_id;
+    FROM Cart_items
+    WHERE user_id = p_user_id;
 END $$
 
 DELIMITER ;

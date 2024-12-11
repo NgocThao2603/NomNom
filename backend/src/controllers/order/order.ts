@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Order from "../../models/order/order";
 import Cart from "../../models/cart/cart";
 
+//==================================================================================
 export const placeOrders = async (req: Request, res: Response) => {
   try {
     const { user_id, dish_ids } = req.body;
@@ -17,6 +18,7 @@ export const placeOrders = async (req: Request, res: Response) => {
   }
 };
 
+//==================================================================================
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const { user_id } = req.params;
@@ -29,6 +31,7 @@ export const getOrders = async (req: Request, res: Response) => {
   }
 };
 
+//==================================================================================
 export const confirmOrder = async (req: Request, res: Response) => {
   try {
     const { order_ids } = req.body;

@@ -1,5 +1,6 @@
 import db from "../../config/db";
 
+//==================================================================================
 export default class Cart {
   static async getCartItems(userId: string) {
     try {
@@ -11,6 +12,7 @@ export default class Cart {
     }
   }
 
+  //==================================================================================
   static async addToCart(user_id: string, dish_id: number, quantity: number) {
     try {
       const query = "CALL AddOrUpdateCartItem(?, ?, ?)";
@@ -22,19 +24,21 @@ export default class Cart {
     }
   }
 
+  //==================================================================================
   static async deleteFromCart(user_id: string, dish_id: string) {
     try {
       const query =
-        "DELETE FROM `nomnom`.`cart_items` WHERE `user_id` = ? AND `dish_id` = ?";
+        "DELETE FROM `nomnom`.`Cart_items` WHERE `user_id` = ? AND `dish_id` = ?";
       await db.query(query, [user_id, dish_id]);
     } catch (error) {
       throw error;
     }
   }
 
+  //==================================================================================
   static async clearCart(user_id: string) {
     try {
-      const query = "DELETE FROM `cart_items` WHERE `user_id` = ?";
+      const query = "DELETE FROM `Cart_items` WHERE `user_id` = ?";
       await db.query(query, [user_id]);
     } catch (error) {
       throw error;
