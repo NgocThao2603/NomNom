@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box, Typography, Grid, Card, CardMedia, Button, TextField, IconButton, Rating, Snackbar, Alert } from '@mui/material';
 import { formatNumber } from 'src/utils/format';
@@ -24,6 +25,7 @@ interface DetailProps {
 }
 
 const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description }) => {
+  const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
@@ -95,28 +97,28 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
                   },
                 }}
               >
-                {isFavorited ? 'Favorited' : 'Favorite'}
+                {isFavorited ? t('views.dish-detail.components.detail.favorite.favorited') : t('views.dish-detail.components.detail.favorite.favorite')}
               </Button>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1" sx={{ marginRight: 1 }}>
-                Rating:
+              {t('views.dish-detail.components.detail.rating')}
               </Typography>
               <StarIcon sx={{ color: '#FAAF00' }} />
               {average_rating}
             </Box>
             <Typography variant="body2" color="textSecondary" gutterBottom>
-              Calories: {calories} kcal
+            {t('views.dish-detail.components.detail.calories')} {calories} kcal
             </Typography>
             <Typography variant="h5" color="primary" gutterBottom>
-              Price: {formatNumber(price)} VNĐ
+            {t('views.dish-detail.components.detail.price')} {formatNumber(price)} VNĐ
             </Typography>
             <Typography variant="body2" color="textSecondary" gutterBottom>
               <RoomRoundedIcon sx={{ fontSize: 20, marginRight: 1, color: 'ActiveBorder' }} />
-              Address: {address}
+              {t('views.dish-detail.components.detail.address')} {address}
             </Typography>
             <Box sx={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Typography variant="body1">Quantity:</Typography>
+              <Typography variant="body1">{t('views.dish-detail.components.detail.quantity')}</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton onClick={decreaseQuantity} sx={{ padding: 1 }}>
                   <RemoveIcon sx={{ color: 'red' }} />
@@ -151,10 +153,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
             </Box>
             <Box>
               <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
-                Add to cart
+              {t('views.dish-detail.components.detail.button.addToCart')}
               </Button>
               <Button variant="contained" color="primary" sx={{ marginLeft: 2 }}>
-                Buy now
+              {t('views.dish-detail.components.detail.button.buyNow')}
               </Button>
             </Box>
           </Box>
@@ -163,7 +165,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       <Box sx={{ marginTop: 4 }}>
         <Typography variant="h6">
           <InfoIcon sx={{ fontSize: 20, marginRight: 1, color: 'ActiveBorder' }} />
-          Info:
+          {t('views.dish-detail.components.detail.info')}
         </Typography>
         <Typography variant="body1">{description}</Typography>
       </Box>
@@ -171,7 +173,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       {/* Snackbar for success message */}
       <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
-          Đã thêm món ăn vào giỏ hàng!
+        {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
       </Snackbar>
     </Box>

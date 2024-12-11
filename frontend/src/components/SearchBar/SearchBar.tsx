@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { Box, IconButton, Badge } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -17,6 +18,7 @@ interface SearchBarProps {
 }
 
 export default function SearchBar(props: SearchBarProps) {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { setFilters, setSearchKeyword, searchKeyword } = props;
   const { openModal } = useModalContext();
@@ -32,7 +34,7 @@ export default function SearchBar(props: SearchBarProps) {
 
   function handleOpenModal() {
     setSearchKeyword('');
-    openModal('Filter', <FilterModal />, { maxWidth: 'xsm' }, true);
+    openModal(t('components.searchBar.filterModal.title'), <FilterModal />, { maxWidth: 'xsm' }, true);
   }
 
   const handleNavigateToCart = () => {

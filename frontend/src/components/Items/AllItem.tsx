@@ -1,15 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography } from '@mui/material';
 import CardItem from '../CartItem/CardItem';
 import { Dish, Item } from 'src/services/types';
 import { IconSpinLoading } from 'src/assets/icon';
 
 export default function AllItem({ Item }: { Item: Item }) {
+  const { t, i18n } = useTranslation();
   return (
     <Box>
       {(Item.status == 'fetching' || Item.status == 'idle') && <IconSpinLoading sx={{ fontSize: '100px', mt: 10 }} />}
       {Item.status == 'failed' && (
         <Typography variant="h6" sx={{ mt: 10, textAlign: 'center' }}>
-          No data
+          {t('components.items.allItem.noData')}
         </Typography>
       )}
       {Item.status == 'success' && (

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Pagination, Typography } from '@mui/material';
 import SearchBar from 'src/components/SearchBar/SearchBar.tsx';
 import { useState, useEffect } from 'react';
@@ -7,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { getItemByKeyword } from 'src/services/index.tsx';
 
 export default function SearchPage() {
+  const { t, i18n } = useTranslation();
   const { keyword } = useParams<{ keyword: string }>();
 
   const [searchKeyword, setSearchKeyword] = useState(keyword || '');
@@ -53,7 +55,7 @@ export default function SearchPage() {
         </>
       ) : (
         <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
-          No results found.
+          {t('views.homepage.search.noResult')}
         </Typography>
       )}
     </Box>

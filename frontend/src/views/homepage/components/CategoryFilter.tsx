@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useCallback, useMemo } from 'react';
 import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import { categories, Category } from 'src/constants/data';
@@ -33,13 +34,14 @@ const CategoryCard = React.memo(({ category, onClick }: { category: Category; on
 ));
 
 export default function CategoryFilter({ onCategoryToggle }: CategoryFilterProps) {
+  const { t, i18n } = useTranslation();
   const randomCategories = useMemo(() => getRandomCategories({ categories, count: 3 }), [categories]);
   const handleCategoryToggle = useCallback((id: number) => onCategoryToggle(id), [onCategoryToggle]);
 
   return (
     <>
       <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
-        Favourite Food
+      {t('views.homepage.components.favoriteTitle')}
       </Typography>
       <Box sx={{ display: 'flex', gap: 3, mt: 2.5 }}>
         {randomCategories.map((category) => (

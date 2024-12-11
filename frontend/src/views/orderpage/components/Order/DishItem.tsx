@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography, Button } from '@mui/material';
 
 type DishItemProps = {
@@ -6,6 +7,7 @@ type DishItemProps = {
 };
 
 export default function DishItem({ dish, onConfirm }: DishItemProps) {
+  const { t, i18n } = useTranslation();
   return (
     <Grid container key={dish.id} sx={{ boxShadow: 'inset 0px 0px 6px #D5D9D985, 0px 3px 6px #00000014', borderRadius: 2, mb: 3 }}>
       <Grid item xs={2}>
@@ -36,7 +38,7 @@ export default function DishItem({ dish, onConfirm }: DishItemProps) {
         >
           {dish.name}
         </Typography>
-        <Typography variant="body2">Calories: {dish.calories} Kcal</Typography>
+        <Typography variant="body2">{t('views.orderpage.components.order.dishItem.calories')} {dish.calories} Kcal</Typography>
         <Typography
           variant="body2"
           sx={{

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Button, IconButton, Input, Typography } from '@mui/material';
 import { useState } from 'react';
 import { categories } from 'src/constants/data';
@@ -7,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 
 export default function FilterModal() {
+  const { t, i18n } = useTranslation();
   const { closeModal } = useModalContext();
   const navigate = useNavigate();
   const { setFilters } = useFilter();
@@ -31,13 +33,13 @@ export default function FilterModal() {
   const handleApply = () => {
     let hasError = false;
     if (parseFloat(priceMin) > parseFloat(priceMax)) {
-      setPriceError('Max price should be greater than Min price');
+      setPriceError(t('components.searchBar.filterModal.errors.maxPriceGreaterThanMin'));
       hasError = true;
     } else {
       setPriceError('');
     }
     if (parseFloat(caloriesMin) > parseFloat(caloriesMax)) {
-      setCaloriesError('Max calories should be greater than Min calories');
+      setCaloriesError(t('components.searchBar.filterModal.errors.maxCaloriesGreaterThanMin'));
       hasError = true;
     } else {
       setCaloriesError('');
@@ -58,7 +60,7 @@ export default function FilterModal() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography sx={{ my: 1 }}>By Category</Typography>
+      <Typography sx={{ my: 1 }}>{t('components.searchBar.filterModal.byCategory')}</Typography>
       {displayedCategories.map((category) => (
         <Button key={category.id} variant={selectedCategories.includes(category.id) ? 'contained' : 'outlined'} sx={{ mb: 1, mx: 1 }} onClick={() => handleCategoryToggle(category.id)}>
           {category.category}
@@ -71,7 +73,7 @@ export default function FilterModal() {
           </IconButton>
         </Box>
       )}
-      <Typography sx={{ my: 1 }}>By Price</Typography>
+      <Typography sx={{ my: 1 }}>{t('components.searchBar.filterModal.byPrice')}</Typography>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Input type="number" placeholder="Min (kVNĐ)" sx={{ width: '45%' }} value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
         -
@@ -82,7 +84,7 @@ export default function FilterModal() {
           {priceError}
         </Typography>
       )}
-      <Typography sx={{ mt: 2, mb: 1 }}>Calories Range</Typography>
+      <Typography sx={{ mt: 2, mb: 1 }}>{t('components.searchBar.filterModal.caloriesRange')}</Typography>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Input type="number" placeholder="Min" sx={{ width: '45%' }} value={caloriesMin} onChange={(e) => setCaloriesMin(e.target.value)} />
         -
@@ -95,7 +97,7 @@ export default function FilterModal() {
       )}
       <Box sx={{ textAlign: 'center' }}>
         <Button variant="contained" sx={{ mt: 3 }} onClick={handleApply}>
-          Apply
+        {t('components.searchBar.filterModal.applyButton')}
         </Button>
       </Box>
     </Box>

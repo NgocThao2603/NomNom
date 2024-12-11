@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Pagination, Typography } from '@mui/material';
 import { useState, useMemo, useEffect } from 'react';
 import SortItem from 'src/components/Items/SortItem';
@@ -7,6 +8,7 @@ import { useItems } from 'src/contexts/item-context/ItemContext';
 import { Dish } from 'src/services/types';
 
 export default function FilterPage() {
+  const { t, i18n } = useTranslation();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
@@ -53,7 +55,7 @@ export default function FilterPage() {
         </>
       ) : (
         <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
-          No items found.
+          {t('views.homepage.filter.noItem')}
         </Typography>
       )}
     </Box>
