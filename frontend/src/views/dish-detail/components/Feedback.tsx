@@ -11,9 +11,7 @@ interface FeedbackProps {
 }
 
 const Feedback: React.FC<FeedbackProps> = ({ feedbackList }) => {
-  const validFeedbackList = feedbackList.filter(
-    feedback => feedback.rating !== null && feedback.comment !== null
-  );
+  const validFeedbackList = feedbackList.filter((feedback) => feedback.rating !== null && feedback.comment !== null);
 
   if (validFeedbackList.length === 0) {
     return null;
