@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { createContext, useContext, useState } from 'react';
 import { Filter, initFilters } from 'src/services/types';
 
@@ -15,9 +16,10 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 };
 
 export const useFilter = (): FilterContextProps => {
+  const { t, i18n } = useTranslation();
   const context = useContext(FilterContext);
   if (!context) {
-    throw new Error('useFilter must be used within a FilterProvider');
+    throw new Error(t('context.errors.filterContext'));
   }
   return context;
 };

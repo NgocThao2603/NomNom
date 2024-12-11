@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { Box, Snackbar, Alert } from '@mui/material';
 import SearchAndFilter from './components/Search/SearchAndFilter';
@@ -9,6 +10,7 @@ import { useCartContext } from 'src/contexts/cart-context/CartContext';
 import axios from 'axios';
 
 export default function OrderPage() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { updateTotalDishes, decrementDishCount } = useCartContext();
 
@@ -172,7 +174,7 @@ export default function OrderPage() {
           {dishes.length > 0 ? (
             <CartSummary total={total} onSelectAll={handleSelectAll} onUnselect={handleUnselect} onDeleteSelected={handleDeleteSelected} onCheckout={handleCheckout} />
           ) : (
-            <Box sx={{ padding: 2, textAlign: 'center', color: 'gray' }}>Không có món ăn nào</Box>
+            <Box sx={{ padding: 2, textAlign: 'center', color: 'gray' }}>{t('views.cartpage.cartPage.noItem')}</Box>
           )}
         </>
       )}
@@ -189,7 +191,7 @@ export default function OrderPage() {
             borderRadius: 1,
           }}
         >
-          Vui lòng chọn món trước khi thanh toán!
+          {t('views.cartpage.cartPage.alert')}
         </Alert>
       </Snackbar>
     </Box>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface CartContextType {
@@ -37,9 +38,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 };
 
 export const useCartContext = (): CartContextType => {
+  const { t, i18n } = useTranslation();
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCartContext must be used within a CartProvider');
+    throw new Error(t('context.errors.cartContext'));
   }
   return context;
 };

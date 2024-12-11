@@ -1,0 +1,137 @@
+{
+  "layout": {
+    "header": {
+      "favorite": "Favorite",
+      "help": "Help",
+      "login": "Login",
+      "signup": "Signup"
+    }
+  },
+  "components": {
+    "items": {
+      "allItem": {
+        "noData": "No data"
+      },
+      "sortItem": {
+        "lowToHigh": "Low to High",
+        "highToLow": "High to Low",
+        "closest": "Closest",
+        "highestRated": "Highest Rated",
+        "notMatch": "No dishes match your search",
+        "sortBy": "Sort by"
+      }
+    },
+    "searchBar": {
+      "filterModal": {
+        "title": "Filter",
+        "errors":{
+          "maxPriceGreaterThanMin": "Max price should be greater than Min price",
+          "maxCaloriesGreaterThanMin": "Max calories should be greater than Min calories"
+        },
+        "byCategory": "By Category",
+        "byPrice": "By Price",
+        "caloriesRange": "Calories Range",
+        "applyButton": "Apply"
+      },
+      "searchItem": {
+        "placeholder": "Search food"
+      }
+    }
+  },
+  "context": {
+    "errors": {
+      "cartContext": "useCartContext must be used within a CartProvider",
+      "filterContext": "useFilter must be used within a FilterProvider"
+    }
+  },
+  "views": {
+    "homepage": {
+      "components": {
+        "favoriteTitle": "Favorite Food"
+      },
+      "filter": {
+        "noItem": "No items found."
+      },
+      "search": {
+        "noResult": "No results found."
+      }
+    },
+    "dish-detail": {
+      "components": {
+        "detail": {
+          "favorite": {
+            "favorited": "Favorited",
+            "favorite": "Favorite"
+          },
+          "rating": "Rating:",
+          "calories": "Calories:",
+          "price": "Price:",
+          "address": "Address:",
+          "quantity": "Quantity:",
+          "info": "Info:",
+          "button": {
+            "addToCart": "Add to Cart",
+            "buyNow": "Buy Now"
+          },
+          "alert": {
+            "addedToCart": "Added to cart successfully"
+          }
+        }
+      },
+      "dishDetail": {
+        "loading": "Loading...",
+        "notFound": "Dish not found."
+      }
+    },
+    "cartpage": {
+      "components": {
+        "cart": {
+          "cartSummary": {
+            "selectAll": "Select All",
+            "unselect": "Unselect",
+            "deleteSelected": "Delete Selected",
+            "total": "Total:",
+            "checkout": "Checkout"
+          },
+          "dishItem": {
+            "delete": "Delete"
+          },
+          "dishList": {
+            "dish": "Dish",
+            "unitPrice": "Unit Price",
+            "quantity": "Quantity",
+            "totalPrice": "Total Price",
+            "action": "Action"
+          }
+        },
+        "search": {
+          "alert": "Please enter search keyword!"
+        }
+      },
+      "cartPage": {
+        "noItem": "No items found.",
+        "alert": "Please select item before payment!"
+      }
+    },
+    "orderpage": {
+      "components": {
+        "order": {
+          "dishItem": {
+            "calories": "Calories:"
+          },
+          "dishList": {
+            "dish": "Dish",
+            "unitPrice": "Unit Price",
+            "quantity": "Quantity",
+            "totalPrice": "Total Price",
+            "action": "Action",
+            "confirmAll": "Confirm All"
+          }
+        }
+      },
+      "orderPage": {
+        "alert": "Order completed!"
+      }
+    }
+  }
+}

@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { Box, TextField, InputAdornment, IconButton, Snackbar, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function SearchItem() {
+  const { t, i18n } = useTranslation();
   const [editKeyword, setEditKeyword] = useState('');
   const [openAlert, setOpenAlert] = useState(false);
   const navigate = useNavigate();
@@ -58,7 +60,7 @@ export default function SearchItem() {
             borderRadius: 1,
           }}
         >
-          Vui lòng nhập từ khóa tìm kiếm!
+          {t('views.cartpage.search.alert')}
         </Alert>
       </Snackbar>
     </Box>

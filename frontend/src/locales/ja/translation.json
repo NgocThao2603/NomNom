@@ -1,0 +1,135 @@
+{
+  "layout": {
+    "header": {
+      "favorite": "お気に入り",
+      "help": "ヘルプ",
+      "login": "ログイン",
+      "signup": "登録"
+    }
+  },
+  "components": {
+    "items": {
+      "allItem": {
+        "noData": "データがありません"
+      },
+      "sortItem": {
+        "lowToHigh": "低い順に並べる",
+        "highToLow": "高い順に並べる",
+        "closest": "最寄り",
+        "highestRated": "評価が高い",
+        "notMatch": "検索に一致する料理はありません",
+        "sortBy": "並べ替え"
+      }
+    },
+    "searchBar": {
+      "filterModal": {
+        "title": "フィルター",
+        "errors": {
+          "maxPriceGreaterThanMin": "最大価格は最小価格より大きい必要があります",
+          "maxCaloriesGreaterThanMin": "最大カロリーは最小カロリーより大きい必要があります"
+        },
+        "byCategory": "カテゴリ別",
+        "byPrice": "価格別",
+        "caloriesRange": "カロリー範囲",
+        "applyButton": "適用"
+      },
+      "searchItem": {
+        "placeholder": "食べ物を検索"
+      }
+    }
+  },
+  "errors": {
+    "cartContext": "useCartContextはCartProvider内で使用する必要があります",
+    "filterContext": "useFilterはFilterProvider内で使用する必要があります"
+  },
+  "views": {
+    "homepage": {
+      "components": {
+        "favoriteTitle": "お気に入りの食べ物"
+      },
+      "filter": {
+        "noItem": "アイテムが見つかりません。"
+      },
+      "search": {
+        "noResult": "結果が見つかりませんでした。"
+      }
+    },
+    "dish-detail": {
+      "components": {
+        "detail": {
+          "favorite": {
+            "favorited": "お気に入り済み",
+            "favorite": "お気に入り"
+          },
+          "rating": "評価:",
+          "calories": "カロリー:",
+          "price": "価格:",
+          "address": "住所:",
+          "quantity": "数量:",
+          "info": "情報:",
+          "button": {
+            "addToCart": "カートに追加",
+            "buyNow": "今すぐ購入"
+          },
+          "alert": {
+            "addedToCart": "カートに追加しました"
+          }
+        }
+      },
+      "dishDetail": {
+        "loading": "読み込み中...",
+        "notFound": "料理が見つかりません。"
+      }
+    },
+    "cartpage": {
+      "components": {
+        "cart": {
+          "cartSummary": {
+            "selectAll": "すべて選択",
+            "unselect": "選択を解除",
+            "deleteSelected": "選択項目を削除",
+            "total": "合計：",
+            "checkout": "チェックアウト"
+          },
+          "dishItem": {
+            "delete": "削除"
+          },
+          "dishList": {
+            "dish": "料理",
+            "unitPrice": "単価",
+            "quantity": "数量",
+            "totalPrice": "合計金額",
+            "action": "操作"
+          }
+        },
+        "search": {
+          "alert": "検索キーワードを入力してください！"
+        }
+      },
+      "cartPage": {
+        "noItem": "アイテムが見つかりません。",
+        "alert": "お支払い前にアイテムを選択してください！"
+      }
+    },
+    "orderpage": {
+      "components": {
+        "order": {
+          "dishItem": {
+            "calories": "カロリー："
+          },
+          "dishList": {
+            "dish": "料理",
+            "unitPrice": "単価",
+            "quantity": "数量",
+            "totalPrice": "合計金額",
+            "action": "操作",
+            "confirmAll": "すべて確認"
+          }
+        },
+        "orderPage": {
+          "alert": "注文が完了しました！"
+        }
+      }
+    }
+  }
+}

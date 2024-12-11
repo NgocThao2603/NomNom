@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +10,7 @@ interface SearchItemProps {
 
 export default function SearchItem({ onSearch, searchKeyword }: SearchItemProps) {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
@@ -29,7 +31,7 @@ export default function SearchItem({ onSearch, searchKeyword }: SearchItemProps)
         value={searchKeyword}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
-        placeholder="Search food"
+        placeholder={t('components.searchBar.searchItem.placeholder')}
         InputProps={{
           endAdornment: <SearchIcon fontSize="large" />,
         }}

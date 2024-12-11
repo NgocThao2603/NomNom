@@ -1,11 +1,12 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CardItem from '../CartItem/CardItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Dish } from 'src/services/types';
 import { useNavigate } from 'react-router-dom';
 
-type SortOption = 'Low to High' | 'High to Low';
+type SortOption = string; // Chấp nhận mọi chuỗi cho linh hoạt hơn
 type SelectedFilters = {
   closest: boolean;
   highestRated: boolean;
@@ -13,18 +14,41 @@ type SelectedFilters = {
 
 export default function SortItem({ Item }: { Item: Dish[] }) {
   const navigate = useNavigate();
-  const [sortOption, setSortOption] = useState<SortOption>('Low to High');
+  const { t, i18n } = useTranslation();
+
+  const [sortOptions, setSortOptions] = useState<SortOption[]>([]);
+  const [sortOption, setSortOption] = useState<SortOption>('');  // Giá trị mặc định là chuỗi rỗng
+
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     closest: false,
     highestRated: false,
   });
 
-  const sortedData = () => {
-    const filteredItems = Item;
+  // Cập nhật các lựa chọn sắp xếp và giá trị mặc định khi ngôn ngữ thay đổi
+  useEffect(() => {
+    const options = [
+      t('components.items.sortItem.lowToHigh'),
+      t('components.items.sortItem.highToLow'),
+    ];
+    setSortOptions(options);
 
-    if (sortOption === 'Low to High') {
+    // Đặt giá trị mặc định cho sortOption nếu chưa có
+    if (!sortOption) {
+      setSortOption(options[0]);
+    } else {
+      // Giữ nguyên giá trị hiện tại khi ngôn ngữ thay đổi
+      const currentOption = options.find(option => option === sortOption);
+      console.log(currentOption);
+      setSortOption(currentOption || options[0]);  // Nếu không tìm thấy, sử dụng giá trị mặc định
+    }
+  }, [t]);  // Chạy lại khi ngôn ngữ thay đổi
+
+  const sortedData = () => {
+    const filteredItems = [...Item];  // Sao chép để tránh thay đổi dữ liệu gốc
+
+    if (sortOption === sortOptions[0]) {
       filteredItems.sort((a, b) => a.price - b.price);
-    } else if (sortOption === 'High to Low') {
+    } else if (sortOption === sortOptions[1]) {
       filteredItems.sort((a, b) => b.price - a.price);
     }
 
@@ -65,31 +89,30 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="h6">Sort by</Typography>
+            <Typography variant="h6">{t('components.items.sortItem.sortBy')}</Typography> {/* Dịch tiêu đề */}
             <Select
               value={sortOption}
-              onChange={(e) => {
-                setSortOption(e.target.value as SortOption);
-              }}
+              onChange={(e) => setSortOption(e.target.value as SortOption)}
               size="small"
             >
-              <MenuItem value="Low to High">Price: Low to High</MenuItem>
-              <MenuItem value="High to Low">Price: High to Low</MenuItem>
+              {sortOptions.map((option, index) => (
+                <MenuItem key={index} value={option}>{option}</MenuItem>
+              ))}
             </Select>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Button variant={selectedFilters.closest ? 'contained' : 'outlined'} onClick={() => handleButtonClick('closest')}>
-              Closest
+              {t('components.items.sortItem.closest')}
             </Button>
             <Button variant={selectedFilters.highestRated ? 'contained' : 'outlined'} onClick={() => handleButtonClick('highestRated')}>
-              Highest Rated
+              {t('components.items.sortItem.highestRated')}
             </Button>
           </Box>
         </Box>
       </Box>
       {Item.length === 0 && (
         <Typography variant="h6" sx={{ mt: 10, textAlign: 'center' }}>
-          No dishes match your search
+          {t('components.items.sortItem.notMatch')}
         </Typography>
       )}
       <Grid container spacing={2}>

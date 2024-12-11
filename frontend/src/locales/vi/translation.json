@@ -1,0 +1,135 @@
+{
+  "layout": {
+    "header": {
+      "favorite": "Yêu thích",
+      "help": "Trợ giúp",
+      "login": "Đăng nhập",
+      "signup": "Đăng ký"
+    }
+  },
+  "components": {
+    "items": {
+      "allItem": {
+        "noData": "Không có dữ liệu"
+      },
+      "sortItem": {
+        "lowToHigh": "Từ thấp đến cao",
+        "highToLow": "Từ cao đến thấp",
+        "closest": "Gần nhất",
+        "highestRated": "Đánh giá cao nhất",
+        "notMatch": "Không có món ăn nào phù hợp với tìm kiếm của bạn",
+        "sortBy": "Sắp xếp theo"
+      }
+    },
+    "searchBar": {
+      "filterModal": {
+        "title": "Bộ lọc",
+        "errors": {
+          "maxPriceGreaterThanMin": "Giá tối đa phải lớn hơn giá tối thiểu",
+          "maxCaloriesGreaterThanMin": "Lượng calo tối đa phải lớn hơn lượng calo tối thiểu"
+        },
+        "byCategory": "Theo Danh Mục",
+        "byPrice": "Theo Giá",
+        "caloriesRange": "Khoảng Calo",
+        "applyButton": "Áp Dụng"
+      },
+      "searchItem": {
+        "placeholder": "Tìm kiếm món ăn"
+      }
+    }
+  },
+  "errors": {
+    "cartContext": "useCartContext phải được sử dụng trong CartProvider",
+    "filterContext": "useFilter phải được sử dụng trong FilterProvider"
+  },
+  "views": {
+    "homepage": {
+      "components": {
+        "favoriteTitle": "Món ăn yêu thích"
+      },
+      "filter": {
+        "noItem": "Không tìm thấy món ăn."
+      },
+      "search": {
+        "noResult": "Không tìm thấy kết quả."
+      }
+    },
+    "dish-detail": {
+      "components": {
+        "detail": {
+          "favorite": {
+            "favorited": "Đã yêu thích",
+            "favorite": "Yêu thích"
+          },
+          "rating": "Đánh giá:",
+          "calories": "Lượng calo:",
+          "price": "Giá:",
+          "address": "Địa chỉ:",
+          "quantity": "Số lượng:",
+          "info": "Thông tin:",
+          "button": {
+            "addToCart": "Thêm vào giỏ hàng",
+            "buyNow": "Mua ngay"
+          },
+          "alert": {
+            "addedToCart": "Đã thêm vào giỏ hàng thành công"
+          }
+        }
+      },
+      "dishDetail": {
+        "loading": "Đang tải...",
+        "notFound": "Không tìm thấy món ăn."
+      }
+    },
+    "cartpage": {
+      "components": {
+        "cart": {
+          "cartSummary": {
+            "selectAll": "Chọn tất cả",
+            "unselect": "Bỏ chọn",
+            "deleteSelected": "Xóa mục đã chọn",
+            "total": "Tổng cộng:",
+            "checkout": "Thanh toán"
+          },
+          "dishItem": {
+            "delete": "Xóa"
+          },
+          "dishList": {
+            "dish": "Món ăn",
+            "unitPrice": "Đơn giá",
+            "quantity": "Số lượng",
+            "totalPrice": "Thành tiền",
+            "action": "Thao tác"
+          }
+        },
+        "search": {
+          "alert": "Vui lòng nhập từ khóa tìm kiếm!"
+        }
+      },
+      "cartPage": {
+        "noItem": "Không tìm thấy món ăn.",
+        "alert": "Vui lòng chọn sản phẩm trước khi thanh toán!"
+      }
+    },
+    "orderpage": {
+      "components": {
+        "order": {
+          "dishItem": {
+            "calories": "Lượng calo:"
+          },
+          "dishList": {
+            "dish": "Món ăn",
+            "unitPrice": "Đơn giá",
+            "quantity": "Số lượng",
+            "totalPrice": "Thành tiền",
+            "action": "Thao tác",
+            "confirmAll": "Xác nhận tất cả"
+          }
+        },
+        "orderPage": {
+          "alert": "Đặt hàng thành công!"
+        }
+      }
+    }
+  }
+}

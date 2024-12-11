@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -7,6 +8,7 @@ import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 import { getDishById } from 'src/services/index.tsx';
 
 const DishDetail = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id?: string }>();
   const [dish, setDish] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -29,8 +31,8 @@ const DishDetail = () => {
     fetchDish();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!dish) return <div>Dish not found.</div>;
+  if (loading) return <div>{t('views.dish-detail.dishDetail.loading')}</div>;
+  if (!dish) return <div>{t('views.dish-detail.dishDetail.notFound')}</div>;
 
   return (
     <div>

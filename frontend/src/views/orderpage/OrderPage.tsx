@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Box, Snackbar, Alert } from '@mui/material';
 import SearchAndFilter from './components/Search/SearchAndFilter';
 import DishList from './components/Order/DishList';
@@ -16,6 +18,7 @@ type Dish = {
 };
 
 export default function OrderPage() {
+  const { t, i18n } = useTranslation();
   const [dishes, setDishes] = useState<Dish[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -79,7 +82,7 @@ export default function OrderPage() {
             borderRadius: 1,
           }}
         >
-          Tất cả đơn hàng đã hoàn tất!
+          {t('views.orderpage.orderPage.alert')}
         </Alert>
       </Snackbar>
     </Box>
