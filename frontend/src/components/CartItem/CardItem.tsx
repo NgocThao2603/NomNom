@@ -1,8 +1,11 @@
+import React from 'react';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { formatNumber } from 'src/utils/format';
 import StarIcon from '@mui/icons-material/Star';
 
 type CardItemProps = {
+  id: number; // Thêm id để sử dụng trong điều hướng
   name: string;
   price: number;
   img_url: string;
@@ -10,9 +13,18 @@ type CardItemProps = {
   distance: string;
 };
 
-export default function CardItem({ name, price, img_url, average_rating, distance }: CardItemProps) {
+export default function CardItem({ id, name, price, img_url, average_rating, distance }: CardItemProps) {
+  const navigate = useNavigate(); // Khởi tạo hook điều hướng
+
+  const handleClick = () => {
+    navigate(`/dish-detail/${id}`); // Điều hướng đến chi tiết món ăn
+  };
+
   return (
-    <Card sx={{ maxWidth: 300, mt: 2, height: '350px', maxHeight: '350px', cursor: 'pointer' }}>
+    <Card
+      sx={{ maxWidth: 300, mt: 2, height: '350px', maxHeight: '350px', cursor: 'pointer' }}
+      onClick={handleClick} // Thêm sự kiện click
+    >
       <CardMedia sx={{ height: 200 }} image={img_url} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{ height: '60px' }}>
@@ -31,11 +43,6 @@ export default function CardItem({ name, price, img_url, average_rating, distanc
           </Typography>
         </Box>
       </CardContent>
-      {/* <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-        <Button size="small" variant="contained">
-          Show More
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }

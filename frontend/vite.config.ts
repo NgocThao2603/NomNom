@@ -18,6 +18,11 @@ export default defineConfig({
         changeOrigin: true, // Chuyển đổi origin của yêu cầu đến máy chủ API
         secure: false,
       },
+      '/api/dishes': {
+        target: 'https://nomnom-pmp0.onrender.com', // Proxy API mới
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
   define: {},
