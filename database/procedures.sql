@@ -7,13 +7,14 @@ DROP PROCEDURE IF EXISTS FilterDishes$$
 
 -- Tạo thủ tục FilterDishes
 CREATE PROCEDURE FilterDishes(
-    IN p_category_ids VARCHAR(255),  -- Chuỗi chứa các category_id, phân cách bằng dấu phẩy
+    IN p_category_ids VARCHAR(255),
     IN p_minPrice DECIMAL(10,2),
     IN p_maxPrice DECIMAL(10,2),
     IN p_minCalo INT,
     IN p_maxCalo INT
 )
 BEGIN
+    -- Lọc món ăn theo các điều kiện
     SELECT 
         d.id, d.dish_name, d.price, d.average_rating, d.calories, d.img_url, d.category_id, 
         r.distance, r.res_address
@@ -39,17 +40,19 @@ DROP PROCEDURE IF EXISTS GetCartItemsByUser$$
 -- Tạo thủ tục GetCartItemsByUser
 CREATE PROCEDURE GetCartItemsByUser(IN userId INT)
 BEGIN
-  SELECT 
-    dishes.id, 
-    dishes.dish_name, 
-    dishes.desrip, 
-    dishes.price, 
-    dishes.calories,
-    dishes.img_url, 
-    cart_items.quantity
-  FROM cart_items 
-  JOIN dishes ON dishes.id = cart_items.dish_id
-  WHERE cart_items.user_id = userId;
+    -- Lấy các món ăn trong giỏ hàng của người dùng
+    SELECT 
+        dishes.id, 
+        dishes.dish_name, 
+        dishes.desrip, 
+        dishes.price, 
+        dishes.calories,
+        dishes.img_url, 
+        cart_items.quantity
+    FROM cart_items 
+    JOIN dishes ON dishes.id = cart_items.dish_id
+    WHERE cart_items.user_id = userId
+    ORDER BY cart_items.id DESC;
 END $$
 
 DELIMITER ;
@@ -59,21 +62,19 @@ DELIMITER $$
 -- Xóa thủ tục cũ nếu có
 DROP PROCEDURE IF EXISTS AddOrUpdateCartItem$$
 
--- Tạo thủ tục mới
+-- Tạo thủ tục AddOrUpdateCartItem
 CREATE PROCEDURE `AddOrUpdateCartItem`(
     IN p_user_id INT, 
     IN p_dish_id INT, 
     IN p_quantity INT
 )
 BEGIN
-    -- Kiểm tra nếu món ăn đã có trong giỏ hàng của người dùng
+    -- Thêm hoặc cập nhật món ăn trong giỏ hàng
     IF EXISTS (SELECT 1 FROM `cart_items` WHERE `user_id` = p_user_id AND `dish_id` = p_dish_id) THEN
-        -- Nếu đã có, cập nhật số lượng món ăn
         UPDATE `cart_items`
         SET `quantity` = `quantity` + p_quantity
         WHERE `user_id` = p_user_id AND `dish_id` = p_dish_id;
     ELSE
-        -- Nếu chưa có, chèn món ăn vào giỏ hàng
         INSERT INTO `cart_items` (`user_id`, `dish_id`, `quantity`)
         VALUES (p_user_id, p_dish_id, p_quantity);
     END IF;
@@ -85,3 +86,98 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+-- Xóa thủ tục cũ nếu có
+DROP PROCEDURE IF EXISTS placeOrder$$
+
+CREATE PROCEDURE placeOrder(
+    IN user_id INT,
+    IN dish_id INT
+)
+BEGIN
+    -- Đặt món ăn vào đơn hàng
+    DECLARE dish_price DECIMAL(10, 2);
+    DECLARE dish_quantity INT;
+    DECLARE total DECIMAL(10, 2);
+    
+    SELECT price INTO dish_price
+    FROM Dishes
+    WHERE id = dish_id;
+    
+    IF dish_price IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Dish not found';
+    END IF;
+    
+    SELECT quantity INTO dish_quantity
+    FROM Cart_items
+    WHERE user_id = user_id AND dish_id = dish_id
+    LIMIT 1;
+    
+    IF dish_quantity IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Dish not found in cart';
+    END IF;
+    
+    SET total = dish_price * dish_quantity;
+    
+    INSERT INTO Order_items (user_id, dish_id, price, quantity, total, status)
+    VALUES (user_id, dish_id, dish_price, dish_quantity, total, 'not_confirmed');
+    
+    SELECT 'Order placed successfully' AS message, total AS totalOrderPrice;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+-- Xóa thủ tục cũ nếu có
+DROP PROCEDURE IF EXISTS confirm_order$$
+
+CREATE PROCEDURE confirm_order(IN p_order_id INT)
+BEGIN
+    -- Xác nhận đơn hàng
+    UPDATE Order_items
+    SET status = 'confirmed'
+    WHERE id = p_order_id AND status = 'not_confirmed';
+    
+    IF ROW_COUNT() = 0 THEN
+        SELECT 'No order found to confirm' AS message;
+    ELSE
+        SELECT 'Order confirmed successfully' AS message;
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS get_pending_orders$$
+
+CREATE PROCEDURE get_pending_orders(IN p_user_id INT)
+BEGIN
+    SELECT 
+        oi.id AS id,
+        d.dish_name AS name,
+        d.calories,
+        d.desrip AS description,
+        oi.price,
+        oi.quantity,
+        d.img_url AS image,
+        CASE 
+            WHEN oi.status = 'confirmed' THEN TRUE 
+            ELSE FALSE 
+        END AS confirmed
+    FROM 
+        Order_items oi
+    JOIN 
+        Dishes d ON oi.dish_id = d.id
+    WHERE 
+        oi.user_id = p_user_id AND oi.status = 'not_confirmed'
+    ORDER BY oi.id DESC;
+END$$
+
+DELIMITER ;
+
+

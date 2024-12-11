@@ -5,6 +5,7 @@ import mysql from "mysql2/promise";
 import dishRoutes from "./routes/dishRoutes";
 import dishesRoute from "./routes/dish/dish";
 import cartRoute from "./routes/cart/cart";
+import orderRoute from "./routes/order/order";
 import { getDishesById } from "./controllers/dishController";
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/dish", dishesRoute);
 app.use("/cart", cartRoute);
+app.use("/order", orderRoute);
 app.use("/api/dishes", dishRoutes);
 app.get("/api/dishes/:id", getDishesById);
 

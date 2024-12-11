@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 interface CartContextType {
   totalDishes: number;
   updateTotalDishes: (newTotal: number) => void;
-  decrementDishCount: () => void;
+  decrementDishCount: (count: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,9 +27,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     updateLocalStorage(newTotal);
   };
 
-  const decrementDishCount = () => {
+  const decrementDishCount = (count: number) => {
     const currentTotal = parseInt(localStorage.getItem('totalDishes') || '0', 10);
-    const newTotal = currentTotal > 0 ? currentTotal - 1 : 0;
+    const newTotal = currentTotal - count >= 0 ? currentTotal - count : 0;
     updateLocalStorage(newTotal);
   };
 
