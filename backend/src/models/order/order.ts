@@ -1,5 +1,6 @@
 import db from "../../config/db";
 
+//==================================================================================
 export default class Order {
   static async placeOrder(userId: number, dishId: number) {
     try {
@@ -9,6 +10,7 @@ export default class Order {
     }
   }
 
+  //==================================================================================
   static async getOrders(userId: number) {
     try {
       const [rows] = await db.execute("CALL get_pending_orders(?)", [userId]);
@@ -18,6 +20,7 @@ export default class Order {
     }
   }
 
+  //==================================================================================
   static async confirmOrder(orderId: number) {
     try {
       const [result] = await db.execute("CALL confirm_order(?)", [orderId]);

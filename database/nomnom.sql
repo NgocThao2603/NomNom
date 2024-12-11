@@ -84,3 +84,4 @@ CREATE TABLE Favorite_dish (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (dish_id) REFERENCES Dishes(id) ON DELETE CASCADE
 );
+
