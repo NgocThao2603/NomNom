@@ -54,13 +54,13 @@ export default function DishItem({ dish, onConfirm }: DishItemProps) {
         </Typography>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', textAlign: 'center' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{dish.price.toLocaleString()} VNĐ</Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{(dish.price * 1000).toLocaleString()}</Box>
       </Grid>
       <Grid item xs={2}>
         <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{dish.quantity || 0}</Box>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', textAlign: 'center' }}>
-        <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{((dish.quantity || 0) * dish.price).toLocaleString()} VNĐ</Box>
+        <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{((dish.quantity || 0) * dish.price * 1000).toLocaleString()} VNĐ</Box>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <Button variant="contained" onClick={() => onConfirm(dish.id)} disabled={dish.confirmed}>

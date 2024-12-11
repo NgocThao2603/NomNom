@@ -39,7 +39,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
-  const { totalDishes, updateTotalDishes } = useCartContext();
+  const { updateTotalDishes } = useCartContext();
 
   const addToCart = async () => {
     try {
@@ -52,7 +52,6 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
 
       if (totalDishes !== undefined) {
-        localStorage.setItem('totalDishes', totalDishes.toString());
         updateTotalDishes(totalDishes);
         setOpen(true);
       } else {

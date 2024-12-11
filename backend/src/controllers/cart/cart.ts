@@ -42,19 +42,17 @@ export const addToCart = async (req: Request, res: Response) => {
 //==================================================================================
 export const deleteFromCart = async (req: Request, res: Response) => {
   try {
-    const { user_id, dish_id } = req.body;
+    const { user_id, dish_id } = req.query;
 
     if (!user_id || !dish_id) {
       res.status(400).json({
         error: "User ID and dish ID are required",
       });
+    } else {
+      await Cart.deleteFromCart(user_id.toString(), dish_id.toString());
+      res.status(200).json({ message: "Item deleted successfully" });
     }
-
-    await Cart.deleteFromCart(user_id, dish_id);
-
-    res.status(200).json({ message: "Item deleted successfully" });
   } catch (error) {
-    console.error("Error in deleteFromCart:", error);
     res.status(500).json({ error: error });
   }
 };
