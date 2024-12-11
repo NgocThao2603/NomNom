@@ -5,7 +5,7 @@ import { formatNumber } from 'src/utils/format';
 import StarIcon from '@mui/icons-material/Star';
 
 type CardItemProps = {
-  id: number; // Thêm id để sử dụng trong điều hướng
+  id: number;
   name: string;
   price: number;
   img_url: string;
@@ -14,17 +14,14 @@ type CardItemProps = {
 };
 
 export default function CardItem({ id, name, price, img_url, average_rating, distance }: CardItemProps) {
-  const navigate = useNavigate(); // Khởi tạo hook điều hướng
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/dish-detail/${id}`); // Điều hướng đến chi tiết món ăn
+    navigate(`/dish-detail/${id}`);
   };
 
   return (
-    <Card
-      sx={{ maxWidth: 300, mt: 2, height: '350px', maxHeight: '350px', cursor: 'pointer' }}
-      onClick={handleClick} // Thêm sự kiện click
-    >
+    <Card sx={{ maxWidth: 300, mt: 2, height: '350px', maxHeight: '350px', cursor: 'pointer' }} onClick={handleClick}>
       <CardMedia sx={{ height: 200 }} image={img_url} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{ height: '60px' }}>

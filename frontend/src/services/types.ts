@@ -28,3 +28,13 @@ export const initFilters: Filter = {
   priceRange: { min: '', max: '' },
   caloriesRange: { min: '', max: '' },
 };
+
+export type CartItem = {
+  id: number;
+  name: string;
+  calories: number;
+  description: string;
+  price: number;
+  quantity: number;
+  image: string;
+};

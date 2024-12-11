@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  Button,
-  TextField,
-  IconButton,
-  Rating,
-} from '@mui/material';
+import { Box, Typography, Grid, Card, CardMedia, Button, TextField, IconButton, Rating, Snackbar, Alert } from '@mui/material';
 import { formatNumber } from 'src/utils/format';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -19,8 +9,11 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
+import { useCartContext } from 'src/contexts/cart-context/CartContext';
+import axios from 'axios';
 
 interface DetailProps {
+  id: number;
   image: string;
   name: string;
   average_rating: number;
@@ -30,30 +23,49 @@ interface DetailProps {
   description: string;
 }
 
-const Detail: React.FC<DetailProps> = ({
-  image,
-  name,
-  average_rating,
-  calories,
-  price,
-  address,
-  description,
-}) => {
+const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false); // Snackbar state
 
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
   };
 
   const increaseQuantity = () => {
-    setQuantity((prev) => prev + 1);
+    setQuantity((prev) => (prev < 99 ? prev + 1 : prev));
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity((prev) => prev - 1);
+    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
+  };
+
+  const { totalDishes, updateTotalDishes } = useCartContext();
+
+  const addToCart = async () => {
+    try {
+      const user_id = '1';
+      const response = await axios.post('http://localhost:5000/cart', {
+        user_id,
+        dish_id: id,
+        quantity,
+      });
+      const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
+
+      if (totalDishes !== undefined) {
+        localStorage.setItem('totalDishes', totalDishes.toString());
+        updateTotalDishes(totalDishes);
+        setOpen(true); // Show Snackbar after successful addition to cart
+      } else {
+        console.error('Failed to retrieve total_dishes from response');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpen(false); // Close Snackbar
   };
 
   return (
@@ -61,12 +73,7 @@ const Detail: React.FC<DetailProps> = ({
       <Grid container spacing={5}>
         <Grid item xs={12} md={6}>
           <Card>
-            <CardMedia
-              component="img"
-              height="400"
-              image={image}
-              alt="Dish Image"
-            />
+            <CardMedia component="img" height="400" image={image} alt="Dish Image" />
           </Card>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -116,29 +123,36 @@ const Detail: React.FC<DetailProps> = ({
                 <IconButton onClick={decreaseQuantity} sx={{ padding: 1 }}>
                   <RemoveIcon sx={{ color: 'red' }} />
                 </IconButton>
-                <TextField
-                  value={quantity}
+                <input
                   type="number"
+                  value={quantity}
                   onChange={(e) => {
                     const value = Number(e.target.value);
-                    if (!isNaN(value) && value >= 1) {
+                    if (!isNaN(value) && value >= 1 && value <= 99) {
                       setQuantity(value);
+                    } else if (value > 99) {
+                      setQuantity(99);
                     }
                   }}
-                  sx={{
-                    width: '50px',
+                  max={99}
+                  style={{
+                    width: '80px',
+                    height: '40px',
                     textAlign: 'center',
-                    marginX: 1,
-                    '& input': { textAlign: 'center' },
+                    padding: '0',
+                    border: 'none',
+                    borderRadius: '25px',
+                    fontSize: '16px',
                   }}
                 />
-                <IconButton onClick={increaseQuantity} sx={{ padding: 1 }}>
+
+                <IconButton onClick={increaseQuantity}>
                   <AddIcon sx={{ color: 'green' }} />
                 </IconButton>
               </Box>
             </Box>
             <Box>
-              <Button variant="outlined" startIcon={<ShoppingCartIcon />}>
+              <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
                 Add to cart
               </Button>
               <Button variant="contained" color="primary" sx={{ marginLeft: 2 }}>
@@ -155,6 +169,13 @@ const Detail: React.FC<DetailProps> = ({
         </Typography>
         <Typography variant="body1">{description}</Typography>
       </Box>
+
+      {/* Snackbar for success message */}
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
+          Đã thêm món ăn vào giỏ hàng!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
