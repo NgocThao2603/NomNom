@@ -101,7 +101,7 @@ export const getDishesById = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params; // Lấy id từ params
+    const { id } = req.params;
 
     if (!id) {
       res.status(400).json({
@@ -132,7 +132,7 @@ export const getDishesById = async (
       ORDER BY Dishes.average_rating DESC, Restaurants.distance ASC
     `;
 
-    const [result] = await db.query(query, [id]); // Thêm giá trị id vào query
+    const [result] = await db.query(query, [id]);
 
     res.status(200).json(result);
   } catch (error) {

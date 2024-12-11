@@ -22,7 +22,7 @@ export default class Cart {
     }
   }
 
-  static async deleteFromCart(user_id: string, dish_id: number) {
+  static async deleteFromCart(user_id: string, dish_id: string) {
     try {
       const query =
         "DELETE FROM `nomnom`.`cart_items` WHERE `user_id` = ? AND `dish_id` = ?";

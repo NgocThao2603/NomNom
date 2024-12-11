@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getApi } from './utils';
-import { Dish } from './types';
 
 export async function getItemByKeyword(keyword: string) {
   return await axios.get(getApi(`/api/dishes/search?q=${keyword}`));
@@ -15,6 +14,9 @@ export async function getAllItem() {
 }
 
 export async function getDishById(id: string | undefined) {
-  if (!id) throw new Error('Dish ID is required');
   return await axios.get(getApi(`/api/dishes/${id}`));
+}
+
+export async function deleteDishFromCart(user_id: string, dish_id: string) {
+  return await axios.post(getApi(`/cart`), { user_id, dish_id });
 }

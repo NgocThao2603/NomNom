@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 interface CartContextType {
   totalDishes: number;
   updateTotalDishes: (newTotal: number) => void;
+  decrementDishCount: (count: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -17,12 +18,22 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const updateTotalDishes = (newTotal: number) => {
+  const updateLocalStorage = (newTotal: number) => {
     setTotalDishes(newTotal);
     localStorage.setItem('totalDishes', newTotal.toString());
   };
 
-  return <CartContext.Provider value={{ totalDishes, updateTotalDishes }}>{children}</CartContext.Provider>;
+  const updateTotalDishes = (newTotal: number) => {
+    updateLocalStorage(newTotal);
+  };
+
+  const decrementDishCount = (count: number) => {
+    const currentTotal = parseInt(localStorage.getItem('totalDishes') || '0', 10);
+    const newTotal = currentTotal - count >= 0 ? currentTotal - count : 0;
+    updateLocalStorage(newTotal);
+  };
+
+  return <CartContext.Provider value={{ totalDishes, updateTotalDishes, decrementDishCount }}>{children}</CartContext.Provider>;
 };
 
 export const useCartContext = (): CartContextType => {

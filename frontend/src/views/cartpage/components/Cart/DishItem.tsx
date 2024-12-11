@@ -44,7 +44,7 @@ export default function DishItem({ dish, counts, selectedDishes, onIncrement, on
         </Typography>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', textAlign: 'center' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{dish.price.toLocaleString()} VNĐ</Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{(dish.price * 1000).toLocaleString()} VNĐ</Box>
       </Grid>
       <Grid item xs={2}>
         <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -60,7 +60,7 @@ export default function DishItem({ dish, counts, selectedDishes, onIncrement, on
         </Box>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', textAlign: 'center' }}>
-        <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{((counts[dish.id] || 0) * dish.price).toLocaleString()} VNĐ</Box>
+        <Box sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>{((counts[dish.id] || 0) * dish.price * 1000).toLocaleString()} VNĐ</Box>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <Button variant="contained" color="error" onClick={() => onDelete(dish.id)}>

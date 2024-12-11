@@ -26,7 +26,7 @@ export default function CartSummary({ total, onSelectAll, onUnselect, onDeleteSe
       </Grid>
       <Grid item xs={6}>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', alignItems: 'center' }}>
-          Total: {total.toLocaleString()} VNĐ
+          Total: {(total * 1000).toLocaleString()} VNĐ
           <Button variant="contained" onClick={onCheckout}>
             Checkout
           </Button>

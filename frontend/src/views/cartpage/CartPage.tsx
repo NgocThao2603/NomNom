@@ -5,14 +5,23 @@ import DishList from './components/Cart/DishList';
 import CartSummary from './components/Cart/CartSummary';
 import { useNavigate } from 'react-router-dom';
 import { CartItem } from 'src/services/types';
+import { useCartContext } from 'src/contexts/cart-context/CartContext';
 import axios from 'axios';
 
 export default function OrderPage() {
   const navigate = useNavigate();
+  const { updateTotalDishes, decrementDishCount } = useCartContext();
+
   const [dishes, setDishes] = useState<CartItem[]>([]);
   const [counts, setCounts] = useState<{ [key: number]: number }>({});
+  const [selectedDishes, setSelectedDishes] = useState<{ [id: number]: boolean }>({});
+  const [total, setTotal] = useState(0);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // Fetch dishes data
   useEffect(() => {
+    setLoading(true);
     axios
       .get('http://localhost:5000/cart?user_id=1')
       .then((response) => {
@@ -26,80 +35,119 @@ export default function OrderPage() {
           quantity: dish.quantity,
           image: dish.img_url,
         }));
-
         setDishes(formattedDishes);
 
-        // Khởi tạo counts bằng giá trị quantity từ API
+        // Set initial counts
         const initialCounts = Object.fromEntries(formattedDishes.map((dish) => [dish.id, dish.quantity]));
         setCounts(initialCounts);
       })
-      .catch((error) => {
-        console.error('Error fetching dishes:', error);
-      });
+      .catch((error) => console.error('Error fetching dishes:', error))
+      .finally(() => setLoading(false));
   }, []);
 
-  const [selectedDishes, setSelectedDishes] = useState<{ [id: number]: boolean }>({});
-  const [total, setTotal] = useState(0);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const calculateTotal = () =>
-    dishes.reduce((total, dish) => {
-      const dishCount = counts[dish.id] || 0;
-      return selectedDishes[dish.id] ? total + dishCount * dish.price : total;
-    }, 0);
-
+  // Calculate total price
   useEffect(() => {
-    setTotal(calculateTotal());
-  }, [counts, selectedDishes]);
+    const newTotal = dishes.reduce((acc, dish) => (selectedDishes[dish.id] ? acc + (counts[dish.id] || 0) * dish.price : acc), 0);
+    setTotal(newTotal);
+  }, [counts, selectedDishes, dishes]);
 
-  useEffect(() => {
-    const initialCounts = Object.fromEntries(dishes.map((dish) => [dish.id, dish.quantity || 0]));
-    setCounts(initialCounts);
-  }, [dishes]);
-
-  const handleIncrement = (id: number) => setCounts((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  // Handlers
+  const handleIncrement = (id: number) => {
+    setCounts((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  };
 
   const handleDecrement = (id: number) => {
     setCounts((prev) => {
-      const newCounts = { ...prev, [id]: Math.max(0, (prev[id] || 0) - 1) };
-      if (newCounts[id] === 0) {
+      const updatedCounts = { ...prev, [id]: Math.max(0, (prev[id] || 0) - 1) };
+      if (updatedCounts[id] === 0) {
         setSelectedDishes((prevSelected) => ({ ...prevSelected, [id]: false }));
       }
-      return newCounts;
+      return updatedCounts;
     });
   };
+  const deleteDishesFromCart = async (dishIds: number[]) => {
+    try {
+      setLoading(true);
 
-  const handleDelete = (id: number) => {
-    setCounts((prev) => {
-      const { [id]: _, ...remainingCounts } = prev;
-      return remainingCounts;
-    });
-    setDishes((prev) => prev.filter((dish) => dish.id !== id));
+      // Store the count of deleted dishes
+      const deletedDishCount = dishIds.reduce((count, id) => count + (counts[id] || 0), 0);
+
+      // Perform the deletion for each dish
+      await Promise.all(dishIds.map((id) => axios.delete(`http://localhost:5000/cart?user_id=1&dish_id=${id}`)));
+
+      // Remove deleted dishes from state
+      setCounts((prev) => Object.fromEntries(Object.entries(prev).filter(([id]) => !dishIds.includes(Number(id)))));
+      setDishes((prev) => prev.filter((dish) => !dishIds.includes(dish.id)));
+      setSelectedDishes({});
+
+      // Update the cart count after deleting multiple items
+      decrementDishCount(deletedDishCount); // Pass the count of deleted dishes
+    } catch (error) {
+      console.error('Error deleting dishes from cart:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteDishesFromCart([id]);
+  };
+
+  const handleDeleteSelected = async () => {
+    const selectedIds = Object.entries(selectedDishes)
+      .filter(([id, isSelected]) => isSelected)
+      .map(([id]) => Number(id));
+
+    if (selectedIds.length > 0) {
+      await deleteDishesFromCart(selectedIds);
+    }
   };
 
   const handleCheckboxChange = (id: number) => {
     if ((counts[id] || 0) > 0) {
       setSelectedDishes((prev) => ({ ...prev, [id]: !prev[id] }));
-      console.log(selectedDishes);
     }
   };
 
-  const handleSelectAll = () => setSelectedDishes(Object.fromEntries(dishes.map((dish) => [dish.id, (counts[dish.id] || 0) > 0])));
-
-  const handleUnselect = () => setSelectedDishes({});
-
-  const handleDeleteSelected = () => {
-    const selectedIds = Object.keys(selectedDishes).map(Number);
-    setCounts((prev) => Object.fromEntries(Object.entries(prev).filter(([id]) => !selectedDishes[Number(id)])));
-    setDishes((prev) => prev.filter((dish) => !selectedIds.includes(dish.id)));
+  const handleSelectAll = () => {
+    setSelectedDishes((prev) => {
+      const allSelected = dishes.reduce((acc, dish) => {
+        if (counts[dish.id] > 0) {
+          acc[dish.id] = true;
+        }
+        return acc;
+      }, {} as { [id: number]: boolean });
+      return allSelected;
+    });
   };
 
-  const handleCheckout = () => {
+  const handleUnselect = () => {
+    setSelectedDishes({});
+  };
+
+  const handleCheckout = async () => {
     const selectedItems = dishes.filter((dish) => selectedDishes[dish.id]);
+
     if (selectedItems.length === 0) {
       setOpenSnackbar(true);
     } else {
-      navigate('/order', { state: { selectedItems } });
+      const dishIds = selectedItems.map((dish) => dish.id);
+      try {
+        const response = await axios.post('http://localhost:5000/order/place', {
+          user_id: 1,
+          dish_ids: dishIds,
+        });
+        console.log('API Response:', response);
+
+        if (response.status === 200 && response.data.message === 'All orders placed successfully') {
+          updateTotalDishes(0);
+          navigate('/order');
+        } else {
+          console.error('Unexpected response message:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error placing order:', error);
+      }
     }
   };
 
@@ -108,19 +156,25 @@ export default function OrderPage() {
   return (
     <Box sx={{ padding: 3 }}>
       <SearchAndFilter />
-      <DishList
-        dishes={dishes}
-        counts={counts}
-        selectedDishes={selectedDishes}
-        onIncrement={handleIncrement}
-        onDecrement={handleDecrement}
-        onDelete={handleDelete}
-        onCheckboxChange={handleCheckboxChange}
-      />
-      {dishes.length > 0 ? (
-        <CartSummary total={total} onSelectAll={handleSelectAll} onUnselect={handleUnselect} onDeleteSelected={handleDeleteSelected} onCheckout={handleCheckout} />
+      {loading ? (
+        <Box sx={{ textAlign: 'center' }}>Đang tải...</Box>
       ) : (
-        <Box sx={{ padding: 2, textAlign: 'center', color: 'gray' }}>Không có món ăn nào</Box>
+        <>
+          <DishList
+            dishes={dishes}
+            counts={counts}
+            selectedDishes={selectedDishes}
+            onIncrement={handleIncrement}
+            onDecrement={handleDecrement}
+            onDelete={handleDelete}
+            onCheckboxChange={handleCheckboxChange}
+          />
+          {dishes.length > 0 ? (
+            <CartSummary total={total} onSelectAll={handleSelectAll} onUnselect={handleUnselect} onDeleteSelected={handleDeleteSelected} onCheckout={handleCheckout} />
+          ) : (
+            <Box sx={{ padding: 2, textAlign: 'center', color: 'gray' }}>Không có món ăn nào</Box>
+          )}
+        </>
       )}
 
       <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
