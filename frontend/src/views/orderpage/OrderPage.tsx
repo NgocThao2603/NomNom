@@ -4,7 +4,6 @@ import { Box, Snackbar, Alert } from '@mui/material';
 import SearchAndFilter from './components/Search/SearchAndFilter';
 import DishList from './components/Order/DishList';
 import { getOrders, confirmOrder } from 'src/services/index';
-import axios from 'axios';
 
 type Dish = {
   id: number;

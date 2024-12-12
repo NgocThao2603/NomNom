@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
-import { Box, Typography, Grid, Card, CardMedia, Button, TextField, IconButton, Rating, Snackbar, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Grid, Card, CardMedia, Button, IconButton, Rating, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { formatNumber } from 'src/utils/format';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -28,7 +29,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
-  const [open, setOpen] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
   };
@@ -49,14 +53,32 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       const response = await addDishToCart(user_id, id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
       updateTotalDishes(totalDishes);
-      setOpen(true);
+      setOpenSnackbar(true);
     } catch (error) {
       console.error('Error adding to cart:', error);
     }
   };
 
   const handleCloseSnackbar = () => {
-    setOpen(false);
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmBuyNow = async () => {
+    setOpenDialog(false);
+    try {
+      await addToCart();
+      navigate('/cart');
+    } catch (error) {
+      console.error('Error during Buy Now process:', error);
+    }
   };
 
   return (
@@ -126,15 +148,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
                     }
                   }}
                   max={99}
-                  style={{
-                    width: '80px',
-                    height: '40px',
-                    textAlign: 'center',
-                    padding: '0',
-                    border: 'none',
-                    borderRadius: '25px',
-                    fontSize: '16px',
-                  }}
+                  style={{ width: '80px', height: '40px', textAlign: 'center', padding: '0', border: 'none', borderRadius: '25px', fontSize: '16px' }}
                 />
 
                 <IconButton onClick={increaseQuantity}>
@@ -146,7 +160,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
               <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
                 {t('views.dish-detail.components.detail.button.addToCart')}
               </Button>
-              <Button variant="contained" color="primary" sx={{ marginLeft: 2 }}>
+              <Button variant="contained" color="primary" sx={{ marginLeft: 2 }} onClick={handleOpenDialog}>
                 {t('views.dish-detail.components.detail.button.buyNow')}
               </Button>
             </Box>
@@ -162,11 +176,28 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       </Box>
 
       {/* Snackbar for success message */}
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
           {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
       </Snackbar>
+
+      {/* Dialog for Buy Now confirmation */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{t('views.dish-detail.components.detail.buyNow.confirmTitle')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{t('views.dish-detail.components.detail.buyNow.confirmMessage')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} variant="contained" color="error">
+            {t('views.dish-detail.components.detail.buyNow.cancel')}
+          </Button>
+
+          <Button onClick={handleConfirmBuyNow} variant="contained" autoFocus>
+            {t('views.dish-detail.components.detail.buyNow.confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
