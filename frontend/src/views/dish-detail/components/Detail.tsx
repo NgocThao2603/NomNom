@@ -95,7 +95,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
               <Typography variant="body1" sx={{ marginRight: 1 }}>
                 {t('views.dish-detail.components.detail.rating')}
               </Typography>
-              <StarIcon sx={{ color: '#FAAF00' }} />
+              <StarIcon sx={{ color: '#FAAF00', marginRight: 1 }} />
               {average_rating}
             </Box>
             <Typography variant="body2" color="textSecondary" gutterBottom>

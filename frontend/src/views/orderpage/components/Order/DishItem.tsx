@@ -66,7 +66,7 @@ export default function DishItem({ dish, onConfirm }: DishItemProps) {
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <Button variant="contained" onClick={() => onConfirm(dish.id)} disabled={dish.confirmed}>
-          {dish.confirmed ? 'Confirmed' : 'Confirm'}
+          {dish.confirmed ? t('views.orderpage.components.order.dishItem.confirmed') : t('views.orderpage.components.order.dishItem.confirm')}
         </Button>
       </Grid>
     </Grid>

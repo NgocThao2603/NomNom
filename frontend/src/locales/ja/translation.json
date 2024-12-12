@@ -115,7 +115,9 @@
       "components": {
         "order": {
           "dishItem": {
-            "calories": "カロリー："
+            "calories": "カロリー：",
+            "confirm": "確認",
+            "confirmed": "確認した"
           },
           "dishList": {
             "dish": "料理",
@@ -125,10 +127,10 @@
             "action": "操作",
             "confirmAll": "すべて確認"
           }
-        },
-        "orderPage": {
-          "alert": "注文が完了しました！"
         }
+      },
+      "orderPage": {
+        "alert": "注文が完了しました！"
       }
     }
   }

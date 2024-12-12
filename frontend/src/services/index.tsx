@@ -17,6 +17,14 @@ export async function getDishById(id: string | undefined) {
   return await axios.get(getApi(`/api/dishes/${id}`));
 }
 
+export async function getAverageRating(id: string | undefined) {
+  return await axios.get(getApi(`/api/dishes/rate/${id}`));
+}
+
+export async function getFeedback(id: string | undefined) {
+  return await axios.get(getApi(`/api/dishes/feedback/${id}`));
+}
+
 export async function deleteDishFromCart(user_id: string, dish_id: string) {
   return await axios.post(getApi(`/cart`), { user_id, dish_id });
 }

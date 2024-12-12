@@ -117,7 +117,9 @@
       "components": {
         "order": {
           "dishItem": {
-            "calories": "Calories:"
+            "calories": "Calories:",
+            "confirm": "Confirm",
+            "confirmed": "Confirmed"
           },
           "dishList": {
             "dish": "Dish",
