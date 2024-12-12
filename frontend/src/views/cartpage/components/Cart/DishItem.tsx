@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography, Button, Checkbox } from '@mui/material';
 
 type DishItemProps = {
-  dish: { id: number; name: string; price: number; calories: string; description: string; image: string; quantity: number };
+  dish: { id: number; dish_name: string; price: number; calories: string; desrip: string; img_url: string; quantity: number };
   counts: { [id: number]: number };
   selectedDishes: { [id: number]: boolean };
   onIncrement: (id: number) => void;
@@ -23,8 +23,8 @@ export default function DishItem({ dish, counts, selectedDishes, onIncrement, on
           <Box
             component="img"
             sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            src={dish.image}
-            alt={dish.name}
+            src={dish.img_url}
+            alt={dish.dish_name}
             onDragStart={(e) => e.preventDefault()}
             onContextMenu={(e) => e.preventDefault()}
           />
@@ -35,14 +35,14 @@ export default function DishItem({ dish, counts, selectedDishes, onIncrement, on
           variant="h6"
           sx={{ fontWeight: 'bold', textAlign: 'center', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5em', height: '3em' }}
         >
-          {dish.name}
+          {dish.dish_name}
         </Typography>
         <Typography variant="body2">Calories: {dish.calories} Kcal</Typography>
         <Typography
           variant="body2"
           sx={{ textAlign: 'justify', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.5em', height: '6em' }}
         >
-          {dish.description}
+          {dish.desrip}
         </Typography>
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', textAlign: 'center' }}>
@@ -66,7 +66,7 @@ export default function DishItem({ dish, counts, selectedDishes, onIncrement, on
       </Grid>
       <Grid item xs={2} sx={{ padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <Button variant="contained" color="error" onClick={() => onDelete(dish.id)}>
-        {t('views.cartpage.components.cart.dishItem.delete')}
+          {t('views.cartpage.components.cart.dishItem.delete')}
         </Button>
         <Checkbox checked={selectedDishes[dish.id] || false} onChange={() => onCheckboxChange(dish.id)} sx={{ position: 'absolute', top: 0, right: 0 }} />
       </Grid>

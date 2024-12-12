@@ -16,21 +16,21 @@ export default function CartSummary({ total, onSelectAll, onUnselect, onDeleteSe
       <Grid item xs={6}>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button variant="contained" sx={{ borderRadius: 2 }} onClick={onSelectAll}>
-          {t('views.cartpage.components.cart.cartSummary.selectAll')}
+            {t('views.cartpage.components.cart.cartSummary.selectAll')}
           </Button>
           <Button variant="contained" sx={{ borderRadius: 2 }} onClick={onUnselect}>
-          {t('views.cartpage.components.cart.cartSummary.unselect')}
+            {t('views.cartpage.components.cart.cartSummary.unselect')}
           </Button>
           <Button variant="contained" color="error" sx={{ borderRadius: 2 }} onClick={onDeleteSelected}>
-          {t('views.cartpage.components.cart.cartSummary.deleteSelected')}
+            {t('views.cartpage.components.cart.cartSummary.deleteSelected')}
           </Button>
         </Box>
       </Grid>
       <Grid item xs={6}>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', alignItems: 'center' }}>
-        {t('views.cartpage.components.cart.cartSummary.total')} {total.toLocaleString()} VNĐ
+          {t('views.cartpage.components.cart.cartSummary.total')} {(total * 1000).toLocaleString()} VNĐ
           <Button variant="contained" onClick={onCheckout}>
-          {t('views.cartpage.components.cart.cartSummary.checkout')}
+            {t('views.cartpage.components.cart.cartSummary.checkout')}
           </Button>
         </Box>
       </Grid>

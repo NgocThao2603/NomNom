@@ -31,10 +31,10 @@ export const initFilters: Filter = {
 
 export type CartItem = {
   id: number;
-  name: string;
+  dish_name: string;
   calories: number;
-  description: string;
+  desrip: string;
   price: number;
   quantity: number;
-  image: string;
+  img_url: string;
 };

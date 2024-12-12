@@ -11,7 +11,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import axios from 'axios';
+import { addDishToCart } from 'src/services/index';
 
 interface DetailProps {
   id: number;
@@ -46,19 +46,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   const addToCart = async () => {
     try {
       const user_id = '1';
-      const response = await axios.post('http://localhost:5000/cart', {
-        user_id,
-        dish_id: id,
-        quantity,
-      });
+      const response = await addDishToCart(user_id, id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
-
-      if (totalDishes !== undefined) {
-        updateTotalDishes(totalDishes);
-        setOpen(true);
-      } else {
-        console.error('Failed to retrieve total_dishes from response');
-      }
+      updateTotalDishes(totalDishes);
+      setOpen(true);
     } catch (error) {
       console.error('Error adding to cart:', error);
     }
@@ -102,16 +93,16 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1" sx={{ marginRight: 1 }}>
-              {t('views.dish-detail.components.detail.rating')}
+                {t('views.dish-detail.components.detail.rating')}
               </Typography>
               <StarIcon sx={{ color: '#FAAF00' }} />
               {average_rating}
             </Box>
             <Typography variant="body2" color="textSecondary" gutterBottom>
-            {t('views.dish-detail.components.detail.calories')} {calories} kcal
+              {t('views.dish-detail.components.detail.calories')} {calories} kcal
             </Typography>
             <Typography variant="h5" color="primary" gutterBottom>
-            {t('views.dish-detail.components.detail.price')} {formatNumber(price)} VNĐ
+              {t('views.dish-detail.components.detail.price')} {formatNumber(price)} VNĐ
             </Typography>
             <Typography variant="body2" color="textSecondary" gutterBottom>
               <RoomRoundedIcon sx={{ fontSize: 20, marginRight: 1, color: 'ActiveBorder' }} />
@@ -153,10 +144,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
             </Box>
             <Box>
               <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
-              {t('views.dish-detail.components.detail.button.addToCart')}
+                {t('views.dish-detail.components.detail.button.addToCart')}
               </Button>
               <Button variant="contained" color="primary" sx={{ marginLeft: 2 }}>
-              {t('views.dish-detail.components.detail.button.buyNow')}
+                {t('views.dish-detail.components.detail.button.buyNow')}
               </Button>
             </Box>
           </Box>
@@ -173,7 +164,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
       {/* Snackbar for success message */}
       <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
-        {t('views.dish-detail.components.detail.alert.addedToCart')}
+          {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
       </Snackbar>
     </Box>

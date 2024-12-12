@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Box, Snackbar, Alert } from '@mui/material';
 import SearchAndFilter from './components/Search/SearchAndFilter';
 import DishList from './components/Cart/DishList';
@@ -7,10 +7,10 @@ import CartSummary from './components/Cart/CartSummary';
 import { useNavigate } from 'react-router-dom';
 import { CartItem } from 'src/services/types';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import axios from 'axios';
+import { getCartByUserId, placeOrder, deleteCartItem } from 'src/services/index';
 
 export default function OrderPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { updateTotalDishes, decrementDishCount } = useCartContext();
 
@@ -21,44 +21,28 @@ export default function OrderPage() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Fetch dishes data
   useEffect(() => {
     setLoading(true);
-    axios
-      .get('http://localhost:5000/cart?user_id=1')
-      .then((response) => {
-        const fetchedDishes = response.data.data[0];
-        const formattedDishes: CartItem[] = fetchedDishes.map((dish: any) => ({
-          id: dish.id,
-          name: dish.dish_name,
-          calories: dish.calories,
-          description: dish.desrip,
-          price: dish.price,
-          quantity: dish.quantity,
-          image: dish.img_url,
-        }));
-        setDishes(formattedDishes);
-
-        // Set initial counts
-        const initialCounts = Object.fromEntries(formattedDishes.map((dish) => [dish.id, dish.quantity]));
+    getCartByUserId('1')
+      .then((fetchedDishes: CartItem[]) => {
+        setDishes(fetchedDishes);
+        const initialCounts = Object.fromEntries(fetchedDishes.map((dish: CartItem) => [dish.id, dish.quantity]));
         setCounts(initialCounts);
       })
       .catch((error) => console.error('Error fetching dishes:', error))
       .finally(() => setLoading(false));
   }, []);
 
-  // Calculate total price
   useEffect(() => {
     const newTotal = dishes.reduce((acc, dish) => (selectedDishes[dish.id] ? acc + (counts[dish.id] || 0) * dish.price : acc), 0);
     setTotal(newTotal);
   }, [counts, selectedDishes, dishes]);
 
-  // Handlers
-  const handleIncrement = (id: number) => {
+  const handleIncrement = useCallback((id: number) => {
     setCounts((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-  };
+  }, []);
 
-  const handleDecrement = (id: number) => {
+  const handleDecrement = useCallback((id: number) => {
     setCounts((prev) => {
       const updatedCounts = { ...prev, [id]: Math.max(0, (prev[id] || 0) - 1) };
       if (updatedCounts[id] === 0) {
@@ -66,24 +50,17 @@ export default function OrderPage() {
       }
       return updatedCounts;
     });
-  };
+  }, []);
+
   const deleteDishesFromCart = async (dishIds: number[]) => {
     try {
       setLoading(true);
-
-      // Store the count of deleted dishes
       const deletedDishCount = dishIds.reduce((count, id) => count + (counts[id] || 0), 0);
-
-      // Perform the deletion for each dish
-      await Promise.all(dishIds.map((id) => axios.delete(`http://localhost:5000/cart?user_id=1&dish_id=${id}`)));
-
-      // Remove deleted dishes from state
+      await Promise.all(dishIds.map((id) => deleteCartItem(1, id)));
       setCounts((prev) => Object.fromEntries(Object.entries(prev).filter(([id]) => !dishIds.includes(Number(id)))));
       setDishes((prev) => prev.filter((dish) => !dishIds.includes(dish.id)));
       setSelectedDishes({});
-
-      // Update the cart count after deleting multiple items
-      decrementDishCount(deletedDishCount); // Pass the count of deleted dishes
+      decrementDishCount(deletedDishCount);
     } catch (error) {
       console.error('Error deleting dishes from cart:', error);
     } finally {
@@ -91,11 +68,14 @@ export default function OrderPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    await deleteDishesFromCart([id]);
-  };
+  const handleDelete = useCallback(
+    async (id: number) => {
+      await deleteDishesFromCart([id]);
+    },
+    [counts]
+  );
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = useCallback(async () => {
     const selectedIds = Object.entries(selectedDishes)
       .filter(([id, isSelected]) => isSelected)
       .map(([id]) => Number(id));
@@ -103,7 +83,7 @@ export default function OrderPage() {
     if (selectedIds.length > 0) {
       await deleteDishesFromCart(selectedIds);
     }
-  };
+  }, [selectedDishes]);
 
   const handleCheckboxChange = (id: number) => {
     if ((counts[id] || 0) > 0) {
@@ -135,18 +115,9 @@ export default function OrderPage() {
     } else {
       const dishIds = selectedItems.map((dish) => dish.id);
       try {
-        const response = await axios.post('http://localhost:5000/order/place', {
-          user_id: 1,
-          dish_ids: dishIds,
-        });
-        console.log('API Response:', response);
-
-        if (response.status === 200 && response.data.message === 'All orders placed successfully') {
-          updateTotalDishes(0);
-          navigate('/order');
-        } else {
-          console.error('Unexpected response message:', response.data.message);
-        }
+        await placeOrder(1, dishIds);
+        updateTotalDishes(0);
+        navigate('/order');
       } catch (error) {
         console.error('Error placing order:', error);
       }

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { Box, Snackbar, Alert } from '@mui/material';
 import SearchAndFilter from './components/Search/SearchAndFilter';
 import DishList from './components/Order/DishList';
+import { getOrders, confirmOrder } from 'src/services/index';
 import axios from 'axios';
 
 type Dish = {
@@ -25,14 +25,12 @@ export default function OrderPage() {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/order/1');
-        if (response.data && response.data.orders) {
-          const fetchedDishes = response.data.orders[0].map((dish: any) => ({
-            ...dish,
-            confirmed: dish.confirmed === 1,
-          }));
-          setDishes(fetchedDishes);
-        }
+        const response = await getOrders('1');
+        const fetchedDishes = response.data.orders[0].map((dish: any) => ({
+          ...dish,
+          confirmed: dish.confirmed === 1,
+        }));
+        setDishes(fetchedDishes);
       } catch (error) {
         console.error('Error fetching dishes:', error);
       }
@@ -44,19 +42,15 @@ export default function OrderPage() {
   const handleConfirm = async (id: number | null = null) => {
     try {
       const orderIds = id ? [id] : dishes.map((dish) => dish.id);
-
-      const response = await axios.post('http://localhost:5000/order/confirm', { order_ids: orderIds });
-
-      if (response.status === 200) {
-        setDishes((prevDishes) => {
-          const updatedDishes = prevDishes.map((dish) => (orderIds.includes(dish.id) ? { ...dish, confirmed: true } : dish));
-          const allConfirmed = updatedDishes.every((dish) => dish.confirmed);
-          if (allConfirmed) {
-            setOpen(true);
-          }
-          return updatedDishes;
-        });
-      }
+      await confirmOrder(orderIds);
+      setDishes((prevDishes) => {
+        const updatedDishes = prevDishes.map((dish) => (orderIds.includes(dish.id) ? { ...dish, confirmed: true } : dish));
+        const allConfirmed = updatedDishes.every((dish) => dish.confirmed);
+        if (allConfirmed) {
+          setOpen(true);
+        }
+        return updatedDishes;
+      });
     } catch (error) {
       console.error('Error confirming dishes:', error);
     }
