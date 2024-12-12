@@ -5,12 +5,14 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import Detail from './components/Detail';
 import Feedback from './components/Feedback';
 import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
-import { getDishById } from 'src/services/index.tsx';
+import { getDishById, getAverageRating, getFeedback } from 'src/services/index.tsx';
 
 const DishDetail = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { id } = useParams<{ id?: string }>();
   const [dish, setDish] = useState<any>(null);
+  const [rating, setRating] = useState<any>(null);
+  const [feedback, setFeedback] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -31,6 +33,37 @@ const DishDetail = () => {
     fetchDish();
   }, [id]);
 
+  useEffect(() => {
+    const fetchRating = async () => {
+      try {
+        const response = await getAverageRating(id);
+        const rawRating = parseFloat(response.data.average_rating);
+        setRating(Math.round(rawRating * 10) / 10); // Làm tròn đến 1 chữ số thập phân
+      } catch (error) {
+        console.error('Error fetching average rating:', error);
+      }
+    };
+  
+    fetchRating();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const response = await getFeedback(id);
+        const feedbackData = response.data.data.map((feedback: any) => ({
+          ...feedback,
+          rating: Math.round(parseFloat(feedback.rating)), // Làm tròn rating thành số nguyên
+        }));
+        setFeedback(feedbackData);
+      } catch (error) {
+        console.error('Error fetching feedback:', error);
+      }
+    };
+  
+    fetchFeedback();
+  }, [id]);
+
   if (loading) return <div>{t('views.dish-detail.dishDetail.loading')}</div>;
   if (!dish) return <div>{t('views.dish-detail.dishDetail.notFound')}</div>;
 
@@ -41,20 +74,13 @@ const DishDetail = () => {
         id={id ? parseInt(id, 10) : NaN}
         image={dish.img_url}
         name={dish.dish_name}
-        average_rating={parseFloat(dish.average_rating)}
+        average_rating={rating || 0}
         calories={dish.calories}
         price={dish.price * 1000}
         address={`${dish.res_address} (${dish.distance} km)`}
-        description={dish.comment}
+        description={dish.desrip}
       />
-      <Feedback
-        feedbackList={[
-          {
-            rating: dish.rating,
-            comment: dish.comment,
-          },
-        ]}
-      />
+      <Feedback feedbackList={feedback} />
     </div>
   );
 };

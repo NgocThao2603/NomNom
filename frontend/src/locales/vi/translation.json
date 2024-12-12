@@ -121,7 +121,9 @@
       "components": {
         "order": {
           "dishItem": {
-            "calories": "Lượng calo:"
+            "calories": "Lượng calo:",
+            "confirm": "Xác nhận",
+            "confirmed": "Đã xác nhận"
           },
           "dishList": {
             "dish": "Món ăn",
@@ -131,10 +133,10 @@
             "action": "Thao tác",
             "confirmAll": "Xác nhận tất cả"
           }
-        },
-        "orderPage": {
-          "alert": "Đặt hàng thành công!"
         }
+      },
+      "orderPage": {
+        "alert": "Đặt hàng thành công!"
       }
     }
   }
