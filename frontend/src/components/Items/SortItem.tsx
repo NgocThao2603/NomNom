@@ -17,7 +17,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
   const { t, i18n } = useTranslation();
 
   const [sortOptions, setSortOptions] = useState<SortOption[]>([]);
-  const [sortOption, setSortOption] = useState<SortOption>('');  // Giá trị mặc định là chuỗi rỗng
+  const [sortOption, setSortOption] = useState<SortOption>(''); // Giá trị mặc định là chuỗi rỗng
 
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     closest: false,
@@ -26,10 +26,7 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
 
   // Cập nhật các lựa chọn sắp xếp và giá trị mặc định khi ngôn ngữ thay đổi
   useEffect(() => {
-    const options = [
-      t('components.items.sortItem.lowToHigh'),
-      t('components.items.sortItem.highToLow'),
-    ];
+    const options = [t('components.items.sortItem.lowToHigh'), t('components.items.sortItem.highToLow')];
     setSortOptions(options);
 
     // Đặt giá trị mặc định cho sortOption nếu chưa có
@@ -37,14 +34,14 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
       setSortOption(options[0]);
     } else {
       // Giữ nguyên giá trị hiện tại khi ngôn ngữ thay đổi
-      const currentOption = options.find(option => option === sortOption);
+      const currentOption = options.find((option) => option === sortOption);
       console.log(currentOption);
-      setSortOption(currentOption || options[0]);  // Nếu không tìm thấy, sử dụng giá trị mặc định
+      setSortOption(currentOption || options[0]); // Nếu không tìm thấy, sử dụng giá trị mặc định
     }
-  }, [t]);  // Chạy lại khi ngôn ngữ thay đổi
+  }, [t]); // Chạy lại khi ngôn ngữ thay đổi
 
   const sortedData = () => {
-    const filteredItems = [...Item];  // Sao chép để tránh thay đổi dữ liệu gốc
+    const filteredItems = [...Item]; // Sao chép để tránh thay đổi dữ liệu gốc
 
     if (sortOption === sortOptions[0]) {
       filteredItems.sort((a, b) => a.price - b.price);
@@ -90,13 +87,11 @@ export default function SortItem({ Item }: { Item: Dish[] }) {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Typography variant="h6">{t('components.items.sortItem.sortBy')}</Typography> {/* Dịch tiêu đề */}
-            <Select
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value as SortOption)}
-              size="small"
-            >
+            <Select value={sortOption} onChange={(e) => setSortOption(e.target.value as SortOption)} size="small">
               {sortOptions.map((option, index) => (
-                <MenuItem key={index} value={option}>{option}</MenuItem>
+                <MenuItem key={index} value={option}>
+                  {option}
+                </MenuItem>
               ))}
             </Select>
           </Box>
