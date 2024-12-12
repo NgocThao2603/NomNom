@@ -73,6 +73,12 @@
           },
           "alert": {
             "addedToCart": "Đã thêm vào giỏ hàng thành công"
+          },
+          "buyNow": {
+            "confirmTitle": "Xác nhận mua",
+            "confirmMessage": "Bạn có muốn mua ngay và đi đến giỏ hàng không?",
+            "cancel": "Hủy",
+            "confirm": "Xác nhận"
           }
         }
       },

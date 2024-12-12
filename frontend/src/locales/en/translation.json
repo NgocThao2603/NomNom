@@ -24,7 +24,7 @@
     "searchBar": {
       "filterModal": {
         "title": "Filter",
-        "errors":{
+        "errors": {
           "maxPriceGreaterThanMin": "Max price should be greater than Min price",
           "maxCaloriesGreaterThanMin": "Max calories should be greater than Min calories"
         },
@@ -75,6 +75,12 @@
           },
           "alert": {
             "addedToCart": "Added to cart successfully"
+          },
+          "buyNow": {
+            "confirmTitle": "Confirm Purchase",
+            "confirmMessage": "Are you sure you want to buy now and proceed to the cart?",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
           }
         }
       },

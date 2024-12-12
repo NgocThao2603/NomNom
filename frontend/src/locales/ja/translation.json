@@ -73,6 +73,12 @@
           },
           "alert": {
             "addedToCart": "カートに追加しました"
+          },
+          "buyNow": {
+            "confirmTitle": "購入の確認",
+            "confirmMessage": "今すぐ購入してカートに進みますか？",
+            "cancel": "キャンセル",
+            "confirm": "確認"
           }
         }
       },
