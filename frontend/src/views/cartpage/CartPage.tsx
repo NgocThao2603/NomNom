@@ -54,9 +54,8 @@ export default function OrderPage() {
 
   const deleteDishesFromCart = async (dishIds: number[]) => {
     try {
-      setLoading(true);
-      const deletedDishCount = dishIds.reduce((count, id) => count + (counts[id] || 0), 0);
       await Promise.all(dishIds.map((id) => deleteCartItem(1, id)));
+      const deletedDishCount = dishIds.reduce((count, id) => count + (counts[id] || 0), 0);
       setCounts((prev) => Object.fromEntries(Object.entries(prev).filter(([id]) => !dishIds.includes(Number(id)))));
       setDishes((prev) => prev.filter((dish) => !dishIds.includes(dish.id)));
       setSelectedDishes({});
