@@ -6,6 +6,7 @@ import FilterPage from './views/homepage/filter/FilterPage';
 import CartPage from './views/cartpage/CartPage';
 import OrderPage from './views/orderpage/OrderPage';
 import DishDetail from './views/dish-detail/DishDetail';
+import FavoritePage from './views/favoritepage/FavoritePage';
 
 export default function RouterUrl() {
   return useRoutes([
@@ -36,6 +37,10 @@ export default function RouterUrl() {
         {
           path: 'order',
           element: <OrderPage />,
+        },
+        {
+          path: 'favorites',
+          element: <FavoritePage />,
         },
         { path: '', element: <Navigate to={'/home'} /> },
       ],

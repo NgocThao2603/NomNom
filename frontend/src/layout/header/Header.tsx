@@ -15,6 +15,10 @@ export default function Header() {
     i18n.changeLanguage(selectedLanguage); // Thay đổi ngôn ngữ
   };
 
+  const handleNavigateToFavorites = () => {
+    navigate('/favorites');
+  };
+
   return (
     <Box sx={{ py: 2, borderBottom: '1px solid #000' }}>
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -23,7 +27,7 @@ export default function Header() {
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton>
+            <IconButton onClick={handleNavigateToFavorites}>
               <FavoriteIcon sx={{ fontSize: '24px' }} />
             </IconButton>
             {t('layout.header.favorite')}
