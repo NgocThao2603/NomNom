@@ -53,3 +53,11 @@ export async function getOrders(user_id: string) {
 export async function confirmOrder(order_ids: number[]) {
   return await axios.post(getApi(`/order/confirm`), { order_ids });
 }
+
+export async function getOrdersHistoryByUserId(user_id: number) {
+  return await axios.get(getApi(`/order/history/${user_id}`));
+}
+
+export async function postRating(body: any) {
+  return await axios.post(getApi('/order/rate'), body);
+}
