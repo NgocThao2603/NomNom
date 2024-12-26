@@ -24,7 +24,7 @@ export function ModalProvider({ children }: BaseContextProps) {
 
   const closeModal = () => {
     setOptions((prev) => {
-      return { ...prev, maxWidth: 'xsm' };
+      return { ...prev, maxWidth: 'xs' };
     });
     setOpen(false);
   };
