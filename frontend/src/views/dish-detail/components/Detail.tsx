@@ -1,7 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardMedia, Button, IconButton, Rating, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  Button,
+  IconButton,
+  Rating,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import { formatNumber } from 'src/utils/format';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -25,27 +41,45 @@ interface DetailProps {
   description: string;
 }
 
-const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description }) => {
+const Detail: React.FC<DetailProps> = ({
+  id,
+  image,
+  name,
+  average_rating,
+  calories,
+  price,
+  address,
+  description,
+}) => {
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
+  const [tempInput, setTempInput] = useState<string>('1');
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { updateTotalDishes } = useCartContext();
 
   const handleFavoriteToggle = () => {
     setIsFavorited(!isFavorited);
   };
 
   const increaseQuantity = () => {
-    setQuantity((prev) => (prev < 99 ? prev + 1 : prev));
+    setQuantity((prev) => {
+      const newQuantity = prev < 99 ? prev + 1 : prev;
+      setTempInput(newQuantity.toString());
+      return newQuantity;
+    });
   };
 
   const decreaseQuantity = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
+    setQuantity((prev) => {
+      const newQuantity = prev > 1 ? prev - 1 : prev;
+      setTempInput(newQuantity.toString());
+      return newQuantity;
+    });
   };
-
-  const { updateTotalDishes } = useCartContext();
 
   const addToCart = async () => {
     try {
@@ -110,7 +144,9 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
                   },
                 }}
               >
-                {isFavorited ? t('views.dish-detail.components.detail.favorite.favorited') : t('views.dish-detail.components.detail.favorite.favorite')}
+                {isFavorited
+                  ? t('views.dish-detail.components.detail.favorite.favorited')
+                  : t('views.dish-detail.components.detail.favorite.favorite')}
               </Button>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -138,19 +174,35 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
                 </IconButton>
                 <input
                   type="number"
-                  value={quantity}
+                  value={tempInput}
                   onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (!isNaN(value) && value >= 1 && value <= 99) {
-                      setQuantity(value);
-                    } else if (value > 99) {
-                      setQuantity(99);
+                    const value = e.target.value;
+                    if (value === '') {
+                      setTempInput('');
+                    } else {
+                      const numericValue = Number(value);
+                      if (!isNaN(numericValue) && numericValue >= 1 && numericValue <= 99) {
+                        setTempInput(value);
+                        setQuantity(numericValue);
+                      }
+                    }
+                  }}
+                  onBlur={() => {
+                    if (tempInput === '') {
+                      setTempInput(quantity.toString());
                     }
                   }}
                   max={99}
-                  style={{ width: '80px', height: '40px', textAlign: 'center', padding: '0', border: 'none', borderRadius: '25px', fontSize: '16px' }}
+                  style={{
+                    width: '80px',
+                    height: '40px',
+                    textAlign: 'center',
+                    padding: '0',
+                    border: 'none',
+                    borderRadius: '25px',
+                    fontSize: '16px',
+                  }}
                 />
-
                 <IconButton onClick={increaseQuantity}>
                   <AddIcon sx={{ color: 'green' }} />
                 </IconButton>
@@ -160,7 +212,12 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
               <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
                 {t('views.dish-detail.components.detail.button.addToCart')}
               </Button>
-              <Button variant="contained" color="primary" sx={{ marginLeft: 2 }} onClick={handleOpenDialog}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginLeft: 2 }}
+                onClick={handleOpenDialog}
+              >
                 {t('views.dish-detail.components.detail.button.buyNow')}
               </Button>
             </Box>
@@ -175,24 +232,38 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
         <Typography variant="body1">{description}</Typography>
       </Box>
 
-      {/* Snackbar for success message */}
-      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{
+            width: '100%',
+            backgroundColor: 'green',
+            color: 'white',
+            boxShadow: 2,
+            borderRadius: 1,
+          }}
+        >
           {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
       </Snackbar>
 
-      {/* Dialog for Buy Now confirmation */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>{t('views.dish-detail.components.detail.buyNow.confirmTitle')}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{t('views.dish-detail.components.detail.buyNow.confirmMessage')}</DialogContentText>
+          <DialogContentText>
+            {t('views.dish-detail.components.detail.buyNow.confirmMessage')}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} variant="contained" color="error">
             {t('views.dish-detail.components.detail.buyNow.cancel')}
           </Button>
-
           <Button onClick={handleConfirmBuyNow} variant="contained" autoFocus>
             {t('views.dish-detail.components.detail.buyNow.confirm')}
           </Button>
