@@ -53,7 +53,6 @@ export async function getOrders(user_id: string) {
 export async function confirmOrder(order_ids: number[]) {
   return await axios.post(getApi(`/order/confirm`), { order_ids });
 }
-<<<<<<< HEAD
 export async function addDishToFavorite(user_id: string, dish_id: string) {
   return await axios.post(getApi(`/favorite`), { user_id, dish_id });
 }
@@ -62,13 +61,11 @@ export async function getDishFavorite(user_id: string) {
 }
 export async function deleteDishFavorite(user_id: string, dish_id: string) {
   return await axios.delete(getApi(`/favorite?user_id=${user_id}&dish_id=${dish_id}`));
-=======
-
+}
 export async function getOrdersHistoryByUserId(user_id: number) {
   return await axios.get(getApi(`/order/history/${user_id}`));
 }
 
 export async function postRating(body: any) {
   return await axios.post(getApi('/order/rate'), body);
->>>>>>> e82c7a954e59990fa2490c4253c206089ce984de
 }

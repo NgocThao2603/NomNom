@@ -1,22 +1,54 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Item } from 'src/services/types.ts';
-import { getDishFavorite } from 'src/services/index.tsx';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getDishFavorite } from 'src/services';
 
-const FavoriteContext = createContext<Item>({ status: 'idle', data: [] });
+export type FavoriteItem = {
+  dish_id: number;
+  name: string;
+  price: number;
+  image: string;
+};
+
+export type Favorite = {
+  status: 'idle' | 'success' | 'fetching' | 'failed';
+  data: {
+    data: FavoriteItem[];
+  };
+};
+
+const FavoriteContext = createContext<Favorite>({
+  status: 'idle',
+  data: { data: [] },
+});
 
 export const FavoriteProvider = ({ children }: { children: React.ReactNode }) => {
-  const [item, setItem] = useState<Item>({ status: 'idle', data: [] });
+  const [item, setItem] = useState<Favorite>({ status: 'idle', data: { data: [] } });
 
-  async function getItems() {
+  const getItems = async () => {
     try {
-      setItem({ status: 'fetching', data: [] });
-      const response = await getDishFavorite('1');
-      setItem({ status: 'success', data: response.data });
+      setItem({
+        status: 'fetching',
+        data: {
+          data: [],
+        },
+      });
+
+      const response = await getDishFavorite('1'); // Adjust the API call according to your project structure
+      setItem({
+        status: 'success',
+        data: {
+          data: response.data.data,
+        },
+      });
     } catch (error) {
-      setItem({ status: 'failed', data: [] });
-      console.error(error);
+      console.error('Error fetching favorite items:', error);
+      setItem({
+        status: 'failed',
+        data: {
+          data: [],
+        },
+      });
     }
-  }
+  };
 
   useEffect(() => {
     getItems();

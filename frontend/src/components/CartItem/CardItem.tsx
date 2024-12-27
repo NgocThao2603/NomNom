@@ -9,8 +9,8 @@ type CardItemProps = {
   name: string;
   price: number;
   img_url: string;
-  average_rating: string;
-  distance: string;
+  average_rating?: string;
+  distance?: string;
 };
 
 export default function CardItem({ id, name, price, img_url, average_rating, distance }: CardItemProps) {

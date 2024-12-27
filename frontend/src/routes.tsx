@@ -6,11 +6,8 @@ import FilterPage from './views/homepage/filter/FilterPage';
 import CartPage from './views/cartpage/CartPage';
 import OrderPage from './views/orderpage/OrderPage';
 import DishDetail from './views/dish-detail/DishDetail';
-<<<<<<< HEAD
 import FavoritePage from './views/favoritepage/FavoritePage';
-=======
 import OrderHistory from './views/order-history/OrderHistory';
->>>>>>> e82c7a954e59990fa2490c4253c206089ce984de
 
 export default function RouterUrl() {
   return useRoutes([
@@ -43,13 +40,12 @@ export default function RouterUrl() {
           element: <OrderPage />,
         },
         {
-<<<<<<< HEAD
           path: 'favorites',
           element: <FavoritePage />,
-=======
+        },
+        {
           path: 'order-history',
           element: <OrderHistory />,
->>>>>>> e82c7a954e59990fa2490c4253c206089ce984de
         },
         { path: '', element: <Navigate to={'/home'} /> },
       ],

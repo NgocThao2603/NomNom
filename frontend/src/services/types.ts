@@ -38,3 +38,17 @@ export type CartItem = {
   quantity: number;
   img_url: string;
 };
+
+export type FavoriteItem = {
+  dish_id: number;
+  name: string;
+  price: number;
+  img_url: string;
+};
+
+export type Favorite = {
+  status: 'idle' | 'success' | 'fetching' | 'failed';
+  data: {
+    data: FavoriteItem[];
+  };
+};
