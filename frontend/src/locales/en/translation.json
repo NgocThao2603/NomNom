@@ -4,7 +4,10 @@
       "favorite": "Favorite",
       "help": "Help",
       "login": "Login",
-      "signup": "Signup"
+      "signup": "Signup",
+      "profile": "Profile",
+      "orders": "Orders",
+      "logout": "Logout"
     }
   },
   "components": {

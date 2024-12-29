@@ -4,7 +4,10 @@
       "favorite": "Yêu thích",
       "help": "Trợ giúp",
       "login": "Đăng nhập",
-      "signup": "Đăng ký"
+      "signup": "Đăng ký",
+      "profile": "Hồ sơ",
+      "orders": "Đơn hàng",
+      "logout": "Đăng xuất"
     }
   },
   "components": {
