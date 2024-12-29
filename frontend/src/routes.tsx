@@ -7,6 +7,8 @@ import CartPage from './views/cartpage/CartPage';
 import OrderPage from './views/orderpage/OrderPage';
 import DishDetail from './views/dish-detail/DishDetail';
 import OrderHistory from './views/order-history/OrderHistory';
+import LoginPage from './views/login/LoginPage';
+import SignupPage from './views/signup/SignupPage';
 
 export default function RouterUrl() {
   return useRoutes([
@@ -17,6 +19,14 @@ export default function RouterUrl() {
         {
           path: 'home',
           element: <HomePage />,
+        },
+        {
+          path: 'login',
+          element: <LoginPage />,
+        },
+        {
+          path: 'signup',
+          element: <SignupPage />,
         },
         {
           path: 'home/:keyword',

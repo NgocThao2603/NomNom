@@ -1,46 +1,70 @@
-import { useTranslation } from 'react-i18next';
-import { Box, Button, Container, IconButton, MenuItem, Select, Typography, SelectChangeEvent } from '@mui/material';
+import React from 'react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import HelpIcon from '@mui/icons-material/Help';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext'; // Import AuthContext
+import { useTranslation } from 'react-i18next';
 
 export default function Header() {
+  const { loggedIn, setLoggedIn } = useAuth(); // Lấy trạng thái đăng nhập từ context
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
 
-  // Thay đổi ngôn ngữ
-  const handleChangeLanguage = (event: SelectChangeEvent<string>) => {
-    const selectedLanguage = event.target.value; // Lấy giá trị ngôn ngữ
-    i18n.changeLanguage(selectedLanguage); // Thay đổi ngôn ngữ
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget as HTMLElement); // Đảm bảo kiểu đúng
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false); // Thay đổi trạng thái đăng nhập
+    navigate('/login'); // Điều hướng về trang login
   };
 
   return (
     <Box sx={{ py: 2, borderBottom: '1px solid #000' }}>
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Logo */}
         <Box onClick={() => navigate('/home')} sx={{ cursor: 'pointer' }}>
           <Typography variant="h4">NomNom</Typography>
         </Box>
+
+        {/* Actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton>
-              <FavoriteIcon sx={{ fontSize: '24px' }} />
-            </IconButton>
-            {t('layout.header.favorite')}
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton>
-              <HelpIcon sx={{ fontSize: '24px' }} />
-            </IconButton>
-            {t('layout.header.help')}
-          </Box>
+          {/* Favorites (Chỉ hiển thị khi đã đăng nhập) */}
+          {loggedIn && (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton>
+                <FavoriteIcon sx={{ fontSize: '24px' }} />
+              </IconButton>
+              {t('layout.header.favorite')}
+            </Box>
+          )}
+
+          {/* Language Selection */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
               <LanguageIcon sx={{ fontSize: '24px' }} />
             </IconButton>
             <Select
-              value={i18n.language} // Giá trị ngôn ngữ hiện tại
-              onChange={handleChangeLanguage}
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
               size="small"
             >
               <MenuItem value="en">English</MenuItem>
@@ -48,12 +72,37 @@ export default function Header() {
               <MenuItem value="vi">Tiếng Việt</MenuItem>
             </Select>
           </Box>
-          <Box>
-            <Button variant="contained" sx={{ mr: 0.5 }}>
-              {t('layout.header.login')}
-            </Button>
-            <Button variant="outlined">{t('layout.header.signup')}</Button>
-          </Box>
+
+          {/* Login/Signup or Profile */}
+          {!loggedIn ? (
+            <Box>
+              <Button
+                variant={location.pathname === '/login' ? 'contained' : 'outlined'}
+                sx={{ mr: 0.5 }}
+                onClick={() => navigate('/login')}
+              >
+                {t('layout.header.login')}
+              </Button>
+              <Button
+                variant={location.pathname === '/signup' ? 'contained' : 'outlined'}
+                onClick={() => navigate('/signup')}
+              >
+                {t('layout.header.signup')}
+              </Button>
+            </Box>
+          ) : (
+            <Box>
+              <Avatar
+                sx={{ cursor: 'pointer' }}
+                onClick={handleMenuOpen}
+              />
+              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                <MenuItem onClick={() => navigate('/profile')}>{t('layout.header.profile')}</MenuItem>
+                <MenuItem onClick={() => navigate('/order')}>{t('layout.header.orders')}</MenuItem>
+                <MenuItem onClick={handleLogout}>{t('layout.header.logout')}</MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Box>
       </Container>
     </Box>
