@@ -93,8 +93,7 @@ const Detail: React.FC<DetailProps> = ({
       return;
     }
     try {
-      const user_id = '1'; // Replace with actual user ID from context/auth
-      const response = await addDishToCart(user_id, id, quantity);
+      const response = await addDishToCart(id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
       updateTotalDishes(totalDishes);
       setOpenSnackbar(true);
