@@ -1,18 +1,9 @@
 import React from 'react';
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Menu,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Select, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logout } from 'src/services/index.tsx';
 import { useAuth } from '../../contexts/AuthContext'; // Import AuthContext
 import { useTranslation } from 'react-i18next';
 
@@ -32,9 +23,21 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    setLoggedIn(false); // Thay đổi trạng thái đăng nhập
-    navigate('/login'); // Điều hướng về trang login
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('accessToken');
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+      setLoggedIn(false);
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Logout failed:', error);
+      // Xóa accessToken và điều hướng dù có lỗi
+      localStorage.removeItem('accessToken');
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+      setLoggedIn(false);
+      navigate('/login');
+    }
   };
 
   return (
@@ -62,11 +65,7 @@ export default function Header() {
             <IconButton>
               <LanguageIcon sx={{ fontSize: '24px' }} />
             </IconButton>
-            <Select
-              value={i18n.language}
-              onChange={(e) => i18n.changeLanguage(e.target.value)}
-              size="small"
-            >
+            <Select value={i18n.language} onChange={(e) => i18n.changeLanguage(e.target.value)} size="small">
               <MenuItem value="en">English</MenuItem>
               <MenuItem value="jp">日本語</MenuItem>
               <MenuItem value="vi">Tiếng Việt</MenuItem>
@@ -76,26 +75,16 @@ export default function Header() {
           {/* Login/Signup or Profile */}
           {!loggedIn ? (
             <Box>
-              <Button
-                variant={location.pathname === '/login' ? 'contained' : 'outlined'}
-                sx={{ mr: 0.5 }}
-                onClick={() => navigate('/login')}
-              >
+              <Button variant={location.pathname === '/login' ? 'contained' : 'outlined'} sx={{ mr: 0.5 }} onClick={() => navigate('/login')}>
                 {t('layout.header.login')}
               </Button>
-              <Button
-                variant={location.pathname === '/signup' ? 'contained' : 'outlined'}
-                onClick={() => navigate('/signup')}
-              >
+              <Button variant={location.pathname === '/signup' ? 'contained' : 'outlined'} onClick={() => navigate('/signup')}>
                 {t('layout.header.signup')}
               </Button>
             </Box>
           ) : (
             <Box>
-              <Avatar
-                sx={{ cursor: 'pointer' }}
-                onClick={handleMenuOpen}
-              />
+              <Avatar sx={{ cursor: 'pointer' }} onClick={handleMenuOpen} />
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 <MenuItem onClick={() => navigate('/profile')}>{t('layout.header.profile')}</MenuItem>
                 <MenuItem onClick={() => navigate('/order')}>{t('layout.header.orders')}</MenuItem>
