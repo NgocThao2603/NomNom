@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getOrdersHistory, postRating } from 'src/services';
 import DishList from './components/DishList';
+import { useTranslation } from 'react-i18next';
 
 export interface Ordered_Dish {
   order_id: number;
@@ -15,6 +16,7 @@ export interface Ordered_Dish {
   rated_at: number | null;
 }
 export default function OrderHistory() {
+  const { t, i18n } = useTranslation();
   const [dishes, setDishes] = useState<Ordered_Dish[]>([]);
 
   async function fetchOrderHistory() {
@@ -48,7 +50,7 @@ export default function OrderHistory() {
   return (
     <>
       <Typography variant="h3" my={3}>
-        Order History
+        {t('views.orderHistory.components.orderHistory')}
       </Typography>
       <DishList dishes={dishes} onRate={handleRate} />
     </>

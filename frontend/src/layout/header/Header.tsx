@@ -91,8 +91,9 @@ export default function Header() {
             <Box>
               <Avatar sx={{ cursor: 'pointer' }} onClick={handleMenuOpen} />
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                <MenuItem onClick={() => navigate('/profile')}>{t('layout.header.profile')}</MenuItem>
+                <MenuItem onClick={() => navigate('/settings')}>{t('layout.header.settings')}</MenuItem>
                 <MenuItem onClick={() => navigate('/order')}>{t('layout.header.orders')}</MenuItem>
+                <MenuItem onClick={() => navigate('/order-history')}>{t('layout.header.ordersHistory')}</MenuItem>
                 <MenuItem onClick={handleLogout}>{t('layout.header.logout')}</MenuItem>
               </Menu>
             </Box>

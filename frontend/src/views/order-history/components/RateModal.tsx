@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Rating } from '@mui/material';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
+import { useTranslation } from 'react-i18next';
 
 export default function RateModal({ onSubmit }: { onSubmit: (rating: number, comment: string) => void }) {
+  const { t, i18n } = useTranslation();
   const [rating, setRating] = useState<number | null>(0);
   const [comment, setComment] = useState('');
   const { closeModal } = useModalContext();
@@ -26,10 +28,10 @@ export default function RateModal({ onSubmit }: { onSubmit: (rating: number, com
           }}
         />
       </Box>
-      <TextField variant="filled" label="Comment" multiline value={comment} onChange={(e) => setComment(e.target.value)} fullWidth />
+      <TextField variant="filled" label={t('views.orderHistory.components.comment')} multiline value={comment} onChange={(e) => setComment(e.target.value)} fullWidth />
       <Box sx={{ mt: 4, textAlign: 'center' }}>
         <Button variant="contained" onClick={handleSubmit} disabled={Boolean(!rating)}>
-          Submit
+          {t('views.orderHistory.components.submit')}
         </Button>
       </Box>
     </Box>

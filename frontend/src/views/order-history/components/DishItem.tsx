@@ -12,6 +12,11 @@ export default function DishItem({ dish, onRate }: DishItemProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  const formatDateTime = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+  };
+
   return (
     <Grid container key={dish.dish_id} sx={{ boxShadow: 'inset 0px 0px 6px #D5D9D985, 0px 3px 6px #00000014', borderRadius: 2, mb: 3, height: '150px', display: 'flex', alignItems: 'center' }}>
       <Grid item xs={1.5}>
@@ -37,9 +42,9 @@ export default function DishItem({ dish, onRate }: DishItemProps) {
       </Grid>
       <Grid item xs={2} sx={{ textAlign: 'center' }}>
         <Button variant="contained" onClick={() => onRate(dish)} disabled={dish.rated == 1}>
-          {dish.rated ? 'Rated' : 'Rate'}
+          {dish.rated ? t('views.orderHistory.components.rated') : t('views.orderHistory.components.rate')}
         </Button>
-        <Box>{dish.rated === 1 && <Typography variant="body2">{dish.rated_at}</Typography>}</Box>
+        {dish.rated_at && dish.rated == 1 ? <Typography variant="body2">{formatDateTime(dish.rated_at)}</Typography> : <></>}
       </Grid>
     </Grid>
   );

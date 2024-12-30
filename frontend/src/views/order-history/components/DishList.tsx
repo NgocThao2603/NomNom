@@ -50,6 +50,7 @@ export default function DishList({ dishes, onRate }: DishListProps) {
           <Box sx={boxStyle}>{t('views.orderpage.components.order.dishList.action')}</Box>
         </Grid>
       </Grid>
+      {dishes.length == 0 && <Box sx={{ width: '100%', textAlign: 'center', mt: 5 }}>{t('views.orderHistory.orderHistoryPage.noOrder')}</Box>}
       {dishes
         .filter((dish) => dish.rated == 0)
         .map((dish) => (
