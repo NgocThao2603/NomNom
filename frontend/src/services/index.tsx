@@ -39,24 +39,24 @@ export async function getCart() {
   return response.data.data[0];
 }
 
-export async function placeOrder(user_id: number, dish_ids: number[]) {
-  return await axios.post(getApi('/order/place'), { user_id, dish_ids });
+export async function placeOrder(dish_ids: number[]) {
+  return await axios.post(getApi('/order/place'), { dish_ids });
 }
 
 export async function deleteCartItem(id: number) {
   return await axios.delete(getApi(`/cart?dish_id=${id}`));
 }
 
-export async function getOrders(user_id: string) {
-  return await axios.get(getApi(`/order/${user_id}`));
+export async function getOrders() {
+  return await axios.get(getApi(`/order/`));
 }
 
 export async function confirmOrder(order_ids: number[]) {
   return await axios.post(getApi(`/order/confirm`), { order_ids });
 }
 
-export async function getOrdersHistoryByUserId(user_id: number) {
-  return await axios.get(getApi(`/order/history/${user_id}`));
+export async function getOrdersHistory() {
+  return await axios.get(getApi(`/order/history`));
 }
 
 export async function postRating(body: any) {

@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getOrdersHistoryByUserId, postRating } from 'src/services';
+import { getOrdersHistory, postRating } from 'src/services';
 import DishList from './components/DishList';
 
 export interface Ordered_Dish {
@@ -17,7 +17,7 @@ export default function OrderHistory() {
 
   async function fetchOrderHistory() {
     try {
-      const response = await getOrdersHistoryByUserId(1); // hardcode user_id
+      const response = await getOrdersHistory(); // hardcode user_id
       const data = response.data.orders[0];
       setDishes(data);
     } catch (error) {

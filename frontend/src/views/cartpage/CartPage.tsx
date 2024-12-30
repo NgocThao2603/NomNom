@@ -114,7 +114,7 @@ export default function OrderPage() {
     } else {
       const dishIds = selectedItems.map((dish) => dish.id);
       try {
-        await placeOrder(1, dishIds);
+        await placeOrder(dishIds);
         updateTotalDishes(0);
         navigate('/order');
       } catch (error) {

@@ -24,7 +24,7 @@ export default function OrderPage() {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await getOrders('1');
+        const response = await getOrders();
         const fetchedDishes = response.data.orders[0].map((dish: any) => ({
           ...dish,
           confirmed: dish.confirmed === 1,
