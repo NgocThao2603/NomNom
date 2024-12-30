@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Select, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -14,6 +14,11 @@ export default function Header() {
   const { t, i18n } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  useEffect(() => {
+    if (!loggedIn) {
+      setAnchorEl(null); // Đảm bảo menu đóng khi trạng thái đăng nhập thay đổi
+    }
+  }, [loggedIn]);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget as HTMLElement); // Đảm bảo kiểu đúng
@@ -75,16 +80,26 @@ export default function Header() {
           {/* Login/Signup or Profile */}
           {!loggedIn ? (
             <Box>
-              <Button variant={location.pathname === '/login' ? 'contained' : 'outlined'} sx={{ mr: 0.5 }} onClick={() => navigate('/login')}>
+              <Button
+                variant={location.pathname === '/login' ? 'contained' : 'outlined'}
+                sx={{ mr: 0.5 }}
+                onClick={() => navigate('/login')}
+              >
                 {t('layout.header.login')}
               </Button>
-              <Button variant={location.pathname === '/signup' ? 'contained' : 'outlined'} onClick={() => navigate('/signup')}>
+              <Button
+                variant={location.pathname === '/signup' ? 'contained' : 'outlined'}
+                onClick={() => navigate('/signup')}
+              >
                 {t('layout.header.signup')}
               </Button>
             </Box>
           ) : (
             <Box>
-              <Avatar sx={{ cursor: 'pointer' }} onClick={handleMenuOpen} />
+              <Avatar
+                sx={{ cursor: 'pointer' }}
+                onClick={handleMenuOpen}
+              />
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 <MenuItem onClick={() => navigate('/profile')}>{t('layout.header.profile')}</MenuItem>
                 <MenuItem onClick={() => navigate('/order')}>{t('layout.header.orders')}</MenuItem>

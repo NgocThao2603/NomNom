@@ -9,7 +9,7 @@ type CardItemProps = {
   name: string;
   price: number;
   img_url: string;
-  average_rating: string;
+  average_rating: number;
   distance: string;
 };
 
