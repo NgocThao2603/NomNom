@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getApi } from './utils';
+import './axiosInterceptor';
 
 export async function getItemByKeyword(keyword: string) {
   return await axios.get(getApi(`/api/dishes/search?q=${keyword}`));
@@ -65,6 +66,15 @@ export async function postRating(body: any) {
 export async function login(email: string, password: string) {
   return await axios.post(getApi('/user/login'), { email, password });
 }
+
 export async function signup(email: string, username: string, password: string) {
   return await axios.post(getApi('/user/signup'), { email, username, password });
 }
+
+export async function logout() {
+  return await axios.post(getApi('/user/logout'), {}, { withCredentials: true });
+}
+
+export const refreshAccessToken = async () => {
+  return await axios.post(getApi(`/user/refresh_token`), {}, { withCredentials: true });
+};
