@@ -3,11 +3,13 @@ import { Grid, Box } from '@mui/material';
 import DishItem from './DishItem';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
 import RateModal from './RateModal';
-import { Ordered_Dish } from '../OrderHistory';
+import { Ordered_Dish, Ordered_Dish_With_Status } from '../OrderHistory';
+import { IconSpinLoading } from 'src/assets/icon';
 
 type DishListProps = {
-  dishes: Ordered_Dish[];
+  dishes: Ordered_Dish_With_Status;
   onRate: (id: number, rating: number, comment: string) => void;
+  fetchOrderHistory: () => void;
 };
 
 const boxStyle = {
@@ -18,12 +20,12 @@ const boxStyle = {
   height: '100%',
 };
 
-export default function DishList({ dishes, onRate }: DishListProps) {
+export default function DishList({ dishes, onRate, fetchOrderHistory }: DishListProps) {
   const { t, i18n } = useTranslation();
   const { openModal } = useModalContext();
 
   const handleOpenModal = (dish: Ordered_Dish) => {
-    openModal(`${dish.name}`, <RateModal onSubmit={(rating, comment) => handleSubmit(dish, rating, comment)} />, { maxWidth: 'xs' });
+    openModal(`${dish.name}`, <RateModal onSubmit={(rating, comment) => handleSubmit(dish, rating, comment)} fetchOrderHistory={fetchOrderHistory} />, { maxWidth: 'xs' });
   };
 
   const handleSubmit = (dish: Ordered_Dish, rating: number, comment: string) => {
@@ -50,9 +52,10 @@ export default function DishList({ dishes, onRate }: DishListProps) {
           <Box sx={boxStyle}>{t('views.orderpage.components.order.dishList.action')}</Box>
         </Grid>
       </Grid>
-      {dishes.map((dish) => (
-        <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />
-      ))}
+      {dishes.status == 'fetching' && <IconSpinLoading sx={{ fontSize: '100px', textAlign: 'center', mt: 10 }} />}
+      {dishes.status == 'success' && dishes.data.length == 0 && <Box sx={{ width: '100%', textAlign: 'center', mt: 5 }}>{t('views.orderHistory.orderHistoryPage.noOrder')}</Box>}
+      {dishes.status == 'success' && dishes.data.filter((dish) => dish.rated == 0).map((dish) => <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />)}
+      {dishes.status == 'success' && dishes.data.filter((dish) => dish.rated === 1).map((dish) => <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />)}
     </Box>
   );
 }

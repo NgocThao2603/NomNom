@@ -78,3 +78,15 @@ export async function logout() {
 export const refreshAccessToken = async () => {
   return await axios.post(getApi(`/user/refresh_token`), {}, { withCredentials: true });
 };
+
+export async function getUserInfo() {
+  return await axios.get(getApi(`/api/user`), { withCredentials: true });
+}
+
+export async function updateUserInfo(body: any) {
+  return await axios.put(getApi(`/api/user`), body, { withCredentials: true });
+}
+
+export async function updateAvatar(file: any) {
+  return await axios.post(getApi(`/api/files`), file, { withCredentials: true });
+}

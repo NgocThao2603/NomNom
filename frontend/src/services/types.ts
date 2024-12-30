@@ -38,3 +38,13 @@ export type CartItem = {
   quantity: number;
   img_url: string;
 };
+
+export type UserInfo = {
+  user_id: number;
+  username: string;
+  email: string;
+  image: string;
+  avatar: string;
+  address: string;
+  phone: string;
+};

@@ -5,8 +5,9 @@
       "help": "Trợ giúp",
       "login": "Đăng nhập",
       "signup": "Đăng ký",
-      "profile": "Hồ sơ",
+      "settings": "Cài đặt",
       "orders": "Đơn hàng",
+      "ordersHistory": "Lịch sử đơn hàng",
       "logout": "Đăng xuất"
     }
   },
@@ -159,6 +160,19 @@
       },
       "orderPage": {
         "alert": "Đặt hàng thành công!"
+      }
+    },
+    "orderHistory": {
+      "components": {
+        "orderHistory": "Lịch sử đơn hàng",
+        "rate": "Đánh giá",
+        "rated": "Đã đánh giá",
+        "confirmedAt": "Đã xác nhận lúc",
+        "comment": "Bình luận",
+        "submit": "Gửi"
+      },
+      "orderHistoryPage": {
+        "noOrder": "Không tìm thấy đơn hàng."
       }
     }
   }
