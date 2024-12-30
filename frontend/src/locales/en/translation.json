@@ -59,6 +59,25 @@
         "noResult": "No results found."
       }
     },
+    "login": {
+      "title": "LOG IN",
+      "email": "Email",
+      "password": "Password",
+      "button": "Login",
+      "loginWithGoogle": "or login with",
+      "noAccount": "Don't have an account?",
+      "signup": "Sign up"
+    },
+    "signup": {
+      "title": "SIGN UP",
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "button": "Signup",
+      "loginWithGoogle": "or login with",
+      "haveAccount": "Already have an account?",
+      "login": "Login"
+    },
     "dish-detail": {
       "components": {
         "detail": {

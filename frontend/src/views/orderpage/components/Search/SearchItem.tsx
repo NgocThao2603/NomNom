@@ -60,7 +60,7 @@ export default function SearchItem() {
             borderRadius: 1,
           }}
         >
-          {t('views.cartpage.search.alert')}
+          {t('views.cartpage.components.search.alert')}
         </Alert>
       </Snackbar>
     </Box>

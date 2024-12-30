@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
@@ -6,6 +7,7 @@ import { signup } from 'src/services/index.tsx';
 import { useNavigate } from 'react-router-dom';
 
 const SignupPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -73,12 +75,12 @@ const SignupPage: React.FC = () => {
           sx={{ paddingLeft: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
         >
           <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-            SIGN UP
+            {t('views.signup.title')}
           </Typography>
 
           <TextField
             fullWidth
-            label="Email"
+            label={t('views.signup.email')}
             variant="outlined"
             margin="normal"
             value={email}
@@ -86,7 +88,7 @@ const SignupPage: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Username"
+            label={t('views.signup.username')}
             variant="outlined"
             margin="normal"
             value={username}
@@ -94,7 +96,7 @@ const SignupPage: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Password"
+            label={t('views.signup.password')}
             type="password"
             variant="outlined"
             margin="normal"
@@ -115,11 +117,11 @@ const SignupPage: React.FC = () => {
             sx={{ marginTop: 2 }}
             onClick={handleSignup}
           >
-            Signup
+            {t('views.signup.button')}
           </Button>
 
           <Typography variant="body2" align="center" sx={{ marginY: 2 }}>
-            or login with
+            {t('views.signup.loginWithGoogle')}
           </Typography>
 
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
@@ -151,7 +153,7 @@ const SignupPage: React.FC = () => {
           </Box>
 
           <Typography variant="body2" align="center" sx={{ marginTop: -10 }}>
-            Already have an account?{' '}
+            {t('views.signup.haveAccount')}{' '}
             <Typography
               component="span"
               variant="body2"
@@ -159,7 +161,7 @@ const SignupPage: React.FC = () => {
               sx={{ cursor: 'pointer', textDecoration: 'underline' }}
               onClick={() => navigate('/login')}
             >
-              Login
+              {t('views.signup.login')}
             </Typography>
           </Typography>
         </Grid>
