@@ -9,7 +9,7 @@ export default function FavoritePage() {
   const items = useFavorite();
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20; // Adjust the number of items per page
+  const itemsPerPage = 20;
   const totalPages = Math.ceil(items.data.data.length / itemsPerPage);
   const paginatedItems = items.data.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   console.log(paginatedItems);

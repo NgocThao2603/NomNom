@@ -43,7 +43,7 @@ const DishDetail = () => {
         console.error('Error fetching average rating:', error);
       }
     };
-  
+
     fetchRating();
   }, [id]);
 
@@ -60,7 +60,7 @@ const DishDetail = () => {
         console.error('Error fetching feedback:', error);
       }
     };
-  
+
     fetchFeedback();
   }, [id]);
 

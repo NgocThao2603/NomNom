@@ -12,7 +12,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import { addDishToCart } from 'src/services/index';
+import { addDishToCart, addDishToFavorite } from 'src/services/index';
 
 interface DetailProps {
   id: number;
@@ -33,8 +33,13 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleFavoriteToggle = () => {
+  const handleFavoriteToggle = async () => {
     setIsFavorited(!isFavorited);
+    try {
+      await addDishToFavorite('1', id.toString());
+    } catch (error) {
+      console.error('Error adding to favorite:', error);
+    }
   };
 
   const increaseQuantity = () => {

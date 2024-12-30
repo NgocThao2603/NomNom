@@ -26,13 +26,13 @@ export default function Header() {
           <Typography variant="h4">NomNom</Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={handleNavigateToFavorites}>
+          <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleNavigateToFavorites}>
+            <IconButton>
               <FavoriteIcon sx={{ fontSize: '24px' }} />
             </IconButton>
             {t('layout.header.favorite')}
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <IconButton>
               <HelpIcon sx={{ fontSize: '24px' }} />
             </IconButton>

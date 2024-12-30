@@ -32,7 +32,7 @@ export const FavoriteProvider = ({ children }: { children: React.ReactNode }) =>
         },
       });
 
-      const response = await getDishFavorite('1'); // Adjust the API call according to your project structure
+      const response = await getDishFavorite('1');
       setItem({
         status: 'success',
         data: {
