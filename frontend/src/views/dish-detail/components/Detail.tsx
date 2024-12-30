@@ -49,8 +49,7 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
 
   const addToCart = async () => {
     try {
-      const user_id = '1';
-      const response = await addDishToCart(user_id, id, quantity);
+      const response = await addDishToCart(id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
       updateTotalDishes(totalDishes);
       setOpenSnackbar(true);

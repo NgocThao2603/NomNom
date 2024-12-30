@@ -7,7 +7,7 @@ import CartSummary from './components/Cart/CartSummary';
 import { useNavigate } from 'react-router-dom';
 import { CartItem } from 'src/services/types';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import { getCartByUserId, placeOrder, deleteCartItem } from 'src/services/index';
+import { getCart, placeOrder, deleteCartItem } from 'src/services/index';
 
 export default function OrderPage() {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export default function OrderPage() {
 
   useEffect(() => {
     setLoading(true);
-    getCartByUserId('1')
+    getCart()
       .then((fetchedDishes: CartItem[]) => {
         setDishes(fetchedDishes);
         const initialCounts = Object.fromEntries(fetchedDishes.map((dish: CartItem) => [dish.id, dish.quantity]));
@@ -54,7 +54,7 @@ export default function OrderPage() {
 
   const deleteDishesFromCart = async (dishIds: number[]) => {
     try {
-      await Promise.all(dishIds.map((id) => deleteCartItem(1, id)));
+      await Promise.all(dishIds.map((id) => deleteCartItem(id)));
       const deletedDishCount = dishIds.reduce((count, id) => count + (counts[id] || 0), 0);
       setCounts((prev) => Object.fromEntries(Object.entries(prev).filter(([id]) => !dishIds.includes(Number(id)))));
       setDishes((prev) => prev.filter((dish) => !dishIds.includes(dish.id)));

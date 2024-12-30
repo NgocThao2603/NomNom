@@ -26,16 +26,16 @@ export async function getFeedback(id: string | undefined) {
   return await axios.get(getApi(`/api/dishes/feedback/${id}`));
 }
 
-export async function deleteDishFromCart(user_id: string, dish_id: string) {
-  return await axios.post(getApi(`/cart`), { user_id, dish_id });
+export async function deleteDishFromCart(dish_id: string) {
+  return await axios.post(getApi(`/cart`), { dish_id });
 }
 
-export async function addDishToCart(user_id: string, dish_id: number, quantity: number) {
-  return await axios.post(getApi('/cart'), { user_id, dish_id, quantity });
+export async function addDishToCart(dish_id: number, quantity: number) {
+  return await axios.post(getApi('/cart'), { dish_id, quantity });
 }
 
-export async function getCartByUserId(userId: string) {
-  const response = await axios.get(getApi(`/cart?user_id=${userId}`));
+export async function getCart() {
+  const response = await axios.get(getApi(`/cart`));
   return response.data.data[0];
 }
 
@@ -43,8 +43,8 @@ export async function placeOrder(user_id: number, dish_ids: number[]) {
   return await axios.post(getApi('/order/place'), { user_id, dish_ids });
 }
 
-export async function deleteCartItem(user_id: number, id: number) {
-  return await axios.delete(getApi(`/cart?user_id=${user_id}&dish_id=${id}`));
+export async function deleteCartItem(id: number) {
+  return await axios.delete(getApi(`/cart?dish_id=${id}`));
 }
 
 export async function getOrders(user_id: string) {
