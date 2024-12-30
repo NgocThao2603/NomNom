@@ -14,17 +14,26 @@ export interface Ordered_Dish {
   confirmed: number;
   rated: number;
   rated_at: number | null;
+  confirmed_at: number;
 }
+
+export interface Ordered_Dish_With_Status {
+  status: 'idle' | 'success' | 'fetching' | 'failed';
+  data: Ordered_Dish[];
+}
+
 export default function OrderHistory() {
   const { t, i18n } = useTranslation();
-  const [dishes, setDishes] = useState<Ordered_Dish[]>([]);
+  const [dishes, setDishes] = useState<Ordered_Dish_With_Status>({ status: 'idle', data: [] });
 
   async function fetchOrderHistory() {
     try {
-      const response = await getOrdersHistory(); // hardcode user_id
+      setDishes({ status: 'fetching', data: [] });
+      const response = await getOrdersHistory();
       const data = response.data.orders[0];
-      setDishes(data);
+      setDishes({ status: 'success', data });
     } catch (error) {
+      setDishes({ status: 'failed', data: [] });
       console.error(error);
     }
   }
@@ -32,8 +41,7 @@ export default function OrderHistory() {
   async function handleRate(dish_id: number, rating: number, comment: string | null) {
     try {
       const body = {
-        user_id: 1, // hardcode user_id
-        order_id: dishes.find((dish) => dish.dish_id === dish_id)?.order_id,
+        order_id: dishes.data.find((dish) => dish.dish_id === dish_id)?.order_id,
         dish_id,
         rating,
         comment,
@@ -52,7 +60,7 @@ export default function OrderHistory() {
       <Typography variant="h3" my={3}>
         {t('views.orderHistory.components.orderHistory')}
       </Typography>
-      <DishList dishes={dishes} onRate={handleRate} />
+      <DishList dishes={dishes} onRate={handleRate} fetchOrderHistory={fetchOrderHistory} />
     </>
   );
 }

@@ -169,6 +169,7 @@
         "orderHistory": "Order History",
         "rate": "Rate",
         "rated": "Rated",
+        "confirmedAt": "Confirmed at",
         "comment": "Comment",
         "submit": "Submit"
       },

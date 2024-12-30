@@ -167,6 +167,7 @@
         "orderHistory": "注文履歴",
         "rate": "評価",
         "rated": "評価済み",
+        "confirmedAt": "確認日時",
         "comment": "コメント",
         "submit": "提出"
       },

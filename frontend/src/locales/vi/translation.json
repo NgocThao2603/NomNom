@@ -167,6 +167,7 @@
         "orderHistory": "Lịch sử đơn hàng",
         "rate": "Đánh giá",
         "rated": "Đã đánh giá",
+        "confirmedAt": "Đã xác nhận lúc",
         "comment": "Bình luận",
         "submit": "Gửi"
       },

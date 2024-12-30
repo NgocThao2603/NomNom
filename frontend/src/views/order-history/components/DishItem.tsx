@@ -14,7 +14,7 @@ export default function DishItem({ dish, onRate }: DishItemProps) {
 
   const formatDateTime = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
-    return date.toLocaleString();
+    return date.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -26,6 +26,9 @@ export default function DishItem({ dish, onRate }: DishItemProps) {
       </Grid>
       <Grid item xs={2.5}>
         <Box onClick={() => navigate(`/dish-detail/${dish.dish_id}`)} sx={{ cursor: 'pointer' }}>
+          <Typography variant="body2" ml={2}>
+            {formatDateTime(dish.confirmed_at)}
+          </Typography>
           <Typography variant="h6" ml={2}>
             {dish.name}
           </Typography>
@@ -44,7 +47,7 @@ export default function DishItem({ dish, onRate }: DishItemProps) {
         <Button variant="contained" onClick={() => onRate(dish)} disabled={dish.rated == 1}>
           {dish.rated ? t('views.orderHistory.components.rated') : t('views.orderHistory.components.rate')}
         </Button>
-        {dish.rated_at && dish.rated == 1 ? <Typography variant="body2">{formatDateTime(dish.rated_at)}</Typography> : <></>}
+        {/* {dish.rated_at && dish.rated == 1 ? <Typography variant="body2">{formatDateTime(dish.rated_at)}</Typography> : <></>} */}
       </Grid>
     </Grid>
   );

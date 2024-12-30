@@ -3,7 +3,7 @@ import { Box, Button, TextField, Rating } from '@mui/material';
 import { useModalContext } from 'src/contexts/modal-context/modal-context';
 import { useTranslation } from 'react-i18next';
 
-export default function RateModal({ onSubmit }: { onSubmit: (rating: number, comment: string) => void }) {
+export default function RateModal({ onSubmit, fetchOrderHistory }: { onSubmit: (rating: number, comment: string) => void; fetchOrderHistory: () => void }) {
   const { t, i18n } = useTranslation();
   const [rating, setRating] = useState<number | null>(0);
   const [comment, setComment] = useState('');
@@ -12,6 +12,7 @@ export default function RateModal({ onSubmit }: { onSubmit: (rating: number, com
   const handleSubmit = () => {
     if (rating !== null) {
       onSubmit(rating, comment);
+      fetchOrderHistory();
       closeModal();
     }
   };
