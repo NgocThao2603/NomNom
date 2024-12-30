@@ -29,6 +29,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
 import { addDishToCart } from 'src/services/index';
+import { useAuth } from '../../../contexts/AuthContext';
 
 interface DetailProps {
   id: number;
@@ -57,11 +58,16 @@ const Detail: React.FC<DetailProps> = ({
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
 
   const { updateTotalDishes } = useCartContext();
 
   const handleFavoriteToggle = () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     setIsFavorited(!isFavorited);
   };
 
@@ -80,10 +86,14 @@ const Detail: React.FC<DetailProps> = ({
       return newQuantity;
     });
   };
-
+  
   const addToCart = async () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     try {
-      const user_id = '1';
+      const user_id = '1'; // Replace with actual user ID from context/auth
       const response = await addDishToCart(user_id, id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
       updateTotalDishes(totalDishes);
@@ -98,6 +108,10 @@ const Detail: React.FC<DetailProps> = ({
   };
 
   const handleOpenDialog = () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     setOpenDialog(true);
   };
 
@@ -106,6 +120,10 @@ const Detail: React.FC<DetailProps> = ({
   };
 
   const handleConfirmBuyNow = async () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     setOpenDialog(false);
     try {
       await addToCart();
@@ -232,6 +250,7 @@ const Detail: React.FC<DetailProps> = ({
         <Typography variant="body1">{description}</Typography>
       </Box>
 
+      {/* Snackbar for success message */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
@@ -241,13 +260,7 @@ const Detail: React.FC<DetailProps> = ({
         <Alert
           onClose={handleCloseSnackbar}
           severity="success"
-          sx={{
-            width: '100%',
-            backgroundColor: 'green',
-            color: 'white',
-            boxShadow: 2,
-            borderRadius: 1,
-          }}
+          sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}
         >
           {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
