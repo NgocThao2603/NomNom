@@ -79,6 +79,7 @@ const DishDetail = () => {
         price={dish.price * 1000}
         address={`${dish.res_address} (${dish.distance} km)`}
         description={dish.desrip}
+        favorite={dish.favorite}
       />
       <Feedback feedbackList={feedback} />
     </div>

@@ -23,20 +23,22 @@ interface DetailProps {
   price: number;
   address: string;
   description: string;
+  favorite: boolean;
 }
 
-const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description }) => {
+const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description, favorite }) => {
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
+  console.log('aaa', isFavorited);
 
   const handleFavoriteToggle = async () => {
-    setIsFavorited(!isFavorited);
     try {
       await addDishToFavorite('1', id.toString());
+      setIsFavorited(!favorite);
     } catch (error) {
       console.error('Error adding to favorite:', error);
     }
