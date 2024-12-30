@@ -7,7 +7,7 @@ import { Ordered_Dish } from '../OrderHistory';
 
 type DishListProps = {
   dishes: Ordered_Dish[];
-  onRate: (id: number, rating: number, comment: string) => void;
+  onRate: (id: number, dish_id: number, rating: number, comment: string) => void;
 };
 
 const boxStyle = {
@@ -27,7 +27,7 @@ export default function DishList({ dishes, onRate }: DishListProps) {
   };
 
   const handleSubmit = (dish: Ordered_Dish, rating: number, comment: string) => {
-    onRate(dish.dish_id, rating, comment);
+    onRate(dish.order_id, dish.dish_id, rating, comment);
   };
 
   return (
