@@ -27,40 +27,40 @@ export async function getFeedback(id: string | undefined) {
 }
 
 export async function deleteDishFromCart(dish_id: string) {
-  return await axios.post(getApi(`/cart`), { dish_id });
+  return await axios.post(getApi(`/cart`), { dish_id }, { withCredentials: true });
 }
 
 export async function addDishToCart(dish_id: number, quantity: number) {
-  return await axios.post(getApi('/cart'), { dish_id, quantity });
+  return await axios.post(getApi('/cart'), { dish_id, quantity }, { withCredentials: true });
 }
 
 export async function getCart() {
-  const response = await axios.get(getApi(`/cart`));
+  const response = await axios.get(getApi(`/cart`), { withCredentials: true });
   return response.data.data[0];
 }
 
 export async function placeOrder(dish_ids: number[]) {
-  return await axios.post(getApi('/order/place'), { dish_ids });
+  return await axios.post(getApi('/order/place'), { dish_ids }, { withCredentials: true });
 }
 
 export async function deleteCartItem(id: number) {
-  return await axios.delete(getApi(`/cart?dish_id=${id}`));
+  return await axios.delete(getApi(`/cart?dish_id=${id}`), { withCredentials: true });
 }
 
 export async function getOrders() {
-  return await axios.get(getApi(`/order/`));
+  return await axios.get(getApi(`/order/`), { withCredentials: true });
 }
 
 export async function confirmOrder(order_ids: number[]) {
-  return await axios.post(getApi(`/order/confirm`), { order_ids });
+  return await axios.post(getApi(`/order/confirm`), { order_ids }, { withCredentials: true });
 }
 
 export async function getOrdersHistory() {
-  return await axios.get(getApi(`/order/history`));
+  return await axios.get(getApi(`/order/history`), { withCredentials: true });
 }
 
 export async function postRating(body: any) {
-  return await axios.post(getApi('/order/rate'), body);
+  return await axios.post(getApi('/order/rate'), body, { withCredentials: true });
 }
 
 export async function login(email: string, password: string) {

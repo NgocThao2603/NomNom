@@ -28,7 +28,6 @@ export default function OrderHistory() {
   async function handleRate(dish_id: number, rating: number, comment: string | null) {
     try {
       const body = {
-        user_id: 1, // hardcode user_id
         order_id: dish_id,
         dish_id,
         rating,
