@@ -50,9 +50,16 @@ export default function DishList({ dishes, onRate }: DishListProps) {
           <Box sx={boxStyle}>{t('views.orderpage.components.order.dishList.action')}</Box>
         </Grid>
       </Grid>
-      {dishes.map((dish) => (
-        <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />
-      ))}
+      {dishes
+        .filter((dish) => dish.rated == 0)
+        .map((dish) => (
+          <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />
+        ))}
+      {dishes
+        .filter((dish) => dish.rated === 1)
+        .map((dish) => (
+          <DishItem key={dish.dish_id} dish={dish} onRate={handleOpenModal} />
+        ))}
     </Box>
   );
 }

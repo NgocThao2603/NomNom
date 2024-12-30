@@ -10,7 +10,9 @@ export interface Ordered_Dish {
   total_price: number;
   image: string;
   quantity: number;
-  confirmed: boolean;
+  confirmed: number;
+  rated: number;
+  rated_at: number | null;
 }
 export default function OrderHistory() {
   const [dishes, setDishes] = useState<Ordered_Dish[]>([]);
@@ -28,7 +30,8 @@ export default function OrderHistory() {
   async function handleRate(dish_id: number, rating: number, comment: string | null) {
     try {
       const body = {
-        order_id: dish_id,
+        user_id: 1, // hardcode user_id
+        order_id: dishes.find((dish) => dish.dish_id === dish_id)?.order_id,
         dish_id,
         rating,
         comment,

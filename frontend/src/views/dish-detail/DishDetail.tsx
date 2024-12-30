@@ -6,6 +6,7 @@ import Detail from './components/Detail';
 import Feedback from './components/Feedback';
 import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 import { getDishById, getAverageRating, getFeedback } from 'src/services/index.tsx';
+import { IconSpinLoading } from 'src/assets/icon';
 
 const DishDetail = () => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const DishDetail = () => {
         console.error('Error fetching average rating:', error);
       }
     };
-  
+
     fetchRating();
   }, [id]);
 
@@ -60,11 +61,11 @@ const DishDetail = () => {
         console.error('Error fetching feedback:', error);
       }
     };
-  
+
     fetchFeedback();
   }, [id]);
 
-  if (loading) return <div>{t('views.dish-detail.dishDetail.loading')}</div>;
+  if (loading) return <IconSpinLoading sx={{ fontSize: '100px', mt: 10 }} />;
   if (!dish) return <div>{t('views.dish-detail.dishDetail.notFound')}</div>;
 
   return (

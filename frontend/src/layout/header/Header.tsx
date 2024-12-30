@@ -50,7 +50,7 @@ export default function Header() {
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logo */}
         <Box onClick={() => navigate('/home')} sx={{ cursor: 'pointer' }}>
-          <Typography variant="h4">NomNom</Typography>
+          <img src="/logo.png" alt="logo" style={{ height: '50px' }} />
         </Box>
 
         {/* Actions */}
@@ -80,26 +80,16 @@ export default function Header() {
           {/* Login/Signup or Profile */}
           {!loggedIn ? (
             <Box>
-              <Button
-                variant={location.pathname === '/login' ? 'contained' : 'outlined'}
-                sx={{ mr: 0.5 }}
-                onClick={() => navigate('/login')}
-              >
+              <Button variant={location.pathname === '/login' ? 'contained' : 'outlined'} sx={{ mr: 0.5 }} onClick={() => navigate('/login')}>
                 {t('layout.header.login')}
               </Button>
-              <Button
-                variant={location.pathname === '/signup' ? 'contained' : 'outlined'}
-                onClick={() => navigate('/signup')}
-              >
+              <Button variant={location.pathname === '/signup' ? 'contained' : 'outlined'} onClick={() => navigate('/signup')}>
                 {t('layout.header.signup')}
               </Button>
             </Box>
           ) : (
             <Box>
-              <Avatar
-                sx={{ cursor: 'pointer' }}
-                onClick={handleMenuOpen}
-              />
+              <Avatar sx={{ cursor: 'pointer' }} onClick={handleMenuOpen} />
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                 <MenuItem onClick={() => navigate('/profile')}>{t('layout.header.profile')}</MenuItem>
                 <MenuItem onClick={() => navigate('/order')}>{t('layout.header.orders')}</MenuItem>
