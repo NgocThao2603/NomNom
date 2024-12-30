@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Grid, TextField, Typography, IconButton } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,11 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const { setLoggedIn } = useAuth();
+  const { loggedIn, setLoggedIn } = useAuth();
+
+  useEffect(() => {
+    if (loggedIn) navigate('/home');
+  }, [navigate]);
 
   const handleLogin = async () => {
     try {
