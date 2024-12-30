@@ -69,3 +69,10 @@ export async function getOrdersHistoryByUserId(user_id: number) {
 export async function postRating(body: any) {
   return await axios.post(getApi('/order/rate'), body);
 }
+
+export async function login(email: string, password: string) {
+  return await axios.post(getApi('/user/login'), { email, password });
+}
+export async function signup(email: string, username: string, password: string) {
+  return await axios.post(getApi('/user/signup'), { email, username, password });
+}

@@ -4,7 +4,10 @@
       "favorite": "お気に入り",
       "help": "ヘルプ",
       "login": "ログイン",
-      "signup": "登録"
+      "signup": "登録",
+      "profile": "プロフィール",
+      "orders": "注文",
+      "logout": "ログアウト"
     }
   },
   "components": {
