@@ -80,13 +80,13 @@ export const refreshAccessToken = async () => {
 };
 
 export async function getUserInfo() {
-  return await axios.get(getApi(`/api/user`), { withCredentials: true });
+  return await axios.get(getApi(`/user/profile`), { withCredentials: true });
 }
 
 export async function updateUserInfo(body: any) {
-  return await axios.put(getApi(`/api/user`), body, { withCredentials: true });
+  return await axios.put(getApi(`/user/profile`), body, { withCredentials: true });
 }
 
-export async function updateAvatar(file: any) {
-  return await axios.post(getApi(`/api/files`), file, { withCredentials: true });
+export async function updateAvatar(body: any) {
+  return await axios.post(getApi(`/api/files`), body, { withCredentials: true });
 }
