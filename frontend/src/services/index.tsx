@@ -54,7 +54,15 @@ export async function getOrders() {
 export async function confirmOrder(order_ids: number[]) {
   return await axios.post(getApi(`/order/confirm`), { order_ids }, { withCredentials: true });
 }
-
+export async function addDishToFavorite(dish_id: string) {
+  return await axios.post(getApi(`/favorite`), { dish_id }, { withCredentials: true });
+}
+export async function getDishFavorite() {
+  return await axios.get(getApi(`/favorite`), { withCredentials: true });
+}
+export async function deleteDishFavorite(dish_id: string) {
+  return await axios.delete(getApi(`/favorite`), { data: { dish_id }, withCredentials: true });
+}
 export async function getOrdersHistory() {
   return await axios.get(getApi(`/order/history`), { withCredentials: true });
 }

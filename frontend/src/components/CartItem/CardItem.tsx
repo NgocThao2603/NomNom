@@ -9,8 +9,8 @@ type CardItemProps = {
   name: string;
   price: number;
   img_url: string;
-  average_rating: number;
-  distance: string;
+  average_rating?: number;
+  distance?: string;
 };
 
 export default function CardItem({ id, name, price, img_url, average_rating, distance }: CardItemProps) {
@@ -31,13 +31,17 @@ export default function CardItem({ id, name, price, img_url, average_rating, dis
           {formatNumber(price)} VNĐ
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <StarIcon sx={{ color: '#FAAF00' }} />
-            {average_rating}
-          </Box>
-          <Typography variant="body1" color="text.secondary">
-            ~ {distance}km
-          </Typography>
+          {average_rating && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <StarIcon sx={{ color: '#FAAF00' }} />
+              {average_rating}
+            </Box>
+          )}
+          {distance && (
+            <Typography variant="body1" color="text.secondary">
+              ~ {distance}km
+            </Typography>
+          )}
         </Box>
       </CardContent>
     </Card>

@@ -1,23 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  Button,
-  IconButton,
-  Rating,
-  Snackbar,
-  Alert,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Box, Typography, Grid, Card, CardMedia, Button, IconButton, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { formatNumber } from 'src/utils/format';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -28,7 +12,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import { addDishToCart } from 'src/services/index';
+import { addDishToCart, addDishToFavorite, deleteDishFavorite } from 'src/services/index';
 import { useAuth } from '../../../contexts/AuthContext';
 
 interface DetailProps {
@@ -40,35 +24,45 @@ interface DetailProps {
   price: number;
   address: string;
   description: string;
+  favorite: boolean;
 }
 
-const Detail: React.FC<DetailProps> = ({
-  id,
-  image,
-  name,
-  average_rating,
-  calories,
-  price,
-  address,
-  description,
-}) => {
+const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description, favorite }) => {
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
   const [tempInput, setTempInput] = useState<string>('1');
-  const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { loggedIn } = useAuth();
-  const navigate = useNavigate();
+  const [isFavorited, setIsFavorited] = useState<boolean>(favorite);
 
+  const navigate = useNavigate();
+  console.log('aaa');
+
+  // const handleFavoriteToggle = async () => {
+  //   try {
+  //     await addDishToFavorite('1', id.toString());
+  //     setIsFavorited(!favorite);
+  //   } catch (error) {
+  //     console.error('Error adding to favorite:', error);
+  //   }
   const { updateTotalDishes } = useCartContext();
 
-  const handleFavoriteToggle = () => {
+  const handleFavoriteToggle = async () => {
     if (!loggedIn) {
       navigate('/login');
       return;
     }
-    setIsFavorited(!isFavorited);
+    try {
+      if (isFavorited) {
+        await deleteDishFavorite(id.toString());
+      } else {
+        await addDishToFavorite(id.toString());
+      }
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
   };
 
   const increaseQuantity = () => {
@@ -86,7 +80,7 @@ const Detail: React.FC<DetailProps> = ({
       return newQuantity;
     });
   };
-  
+
   const addToCart = async () => {
     if (!loggedIn) {
       navigate('/login');
@@ -161,9 +155,7 @@ const Detail: React.FC<DetailProps> = ({
                   },
                 }}
               >
-                {isFavorited
-                  ? t('views.dish-detail.components.detail.favorite.favorited')
-                  : t('views.dish-detail.components.detail.favorite.favorite')}
+                {isFavorited ? t('views.dish-detail.components.detail.favorite.favorited') : t('views.dish-detail.components.detail.favorite.favorite')}
               </Button>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -229,12 +221,7 @@ const Detail: React.FC<DetailProps> = ({
               <Button variant="outlined" startIcon={<ShoppingCartIcon />} onClick={addToCart}>
                 {t('views.dish-detail.components.detail.button.addToCart')}
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginLeft: 2 }}
-                onClick={handleOpenDialog}
-              >
+              <Button variant="contained" color="primary" sx={{ marginLeft: 2 }} onClick={handleOpenDialog}>
                 {t('views.dish-detail.components.detail.button.buyNow')}
               </Button>
             </Box>
@@ -250,17 +237,8 @@ const Detail: React.FC<DetailProps> = ({
       </Box>
 
       {/* Snackbar for success message */}
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}
-        >
+      <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', backgroundColor: 'green', color: 'white', boxShadow: 2, borderRadius: 1 }}>
           {t('views.dish-detail.components.detail.alert.addedToCart')}
         </Alert>
       </Snackbar>
@@ -268,9 +246,7 @@ const Detail: React.FC<DetailProps> = ({
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>{t('views.dish-detail.components.detail.buyNow.confirmTitle')}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {t('views.dish-detail.components.detail.buyNow.confirmMessage')}
-          </DialogContentText>
+          <DialogContentText>{t('views.dish-detail.components.detail.buyNow.confirmMessage')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} variant="contained" color="error">

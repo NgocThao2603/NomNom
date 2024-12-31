@@ -39,6 +39,19 @@ export type CartItem = {
   img_url: string;
 };
 
+export type FavoriteItem = {
+  dish_id: number;
+  name: string;
+  price: number;
+  img_url: string;
+};
+
+export type Favorite = {
+  status: 'idle' | 'success' | 'fetching' | 'failed';
+  data: {
+    data: FavoriteItem[];
+  };
+};
 export type UserInfo = {
   user_id: number;
   username: string;

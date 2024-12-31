@@ -45,6 +45,10 @@ export default function Header() {
     }
   };
 
+  const handleNavigateToFavorites = () => {
+    navigate('/favorites');
+  };
+
   return (
     <Box sx={{ py: 2, borderBottom: '1px solid #000' }}>
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -55,17 +59,18 @@ export default function Header() {
 
         {/* Actions */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          {/* Favorites (Chỉ hiển thị khi đã đăng nhập) */}
           {loggedIn && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleNavigateToFavorites}>
               <IconButton>
                 <FavoriteIcon sx={{ fontSize: '24px' }} />
               </IconButton>
               {t('layout.header.favorite')}
             </Box>
           )}
-
-          {/* Language Selection */}
+          <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <IconButton>{/* <HelpIcon sx={{ fontSize: '24px' }} /> */}</IconButton>
+            {t('layout.header.help')}
+          </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
               <LanguageIcon sx={{ fontSize: '24px' }} />

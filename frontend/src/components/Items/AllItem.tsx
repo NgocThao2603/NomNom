@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Grid, Typography } from '@mui/material';
 import CardItem from '../CartItem/CardItem';
-import { Dish, Item } from 'src/services/types';
+import { Item } from 'src/services/types';
 import { IconSpinLoading } from 'src/assets/icon';
-import { useFilter } from 'src/contexts/filter-context/FilterContext.tsx';
 
 export default function AllItem({ Item }: { Item: Item }) {
   const { t, i18n } = useTranslation();

@@ -26,7 +26,7 @@ export default function HomePage() {
   // Calculate pagination
   const totalPages = Math.ceil(items.data.length / itemsPerPage);
   const paginatedItems = items.data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
+  console.log(paginatedItems);
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };

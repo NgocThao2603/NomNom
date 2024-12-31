@@ -53,6 +53,7 @@ export default function SearchPage() {
       <SearchBar searchKeyword={searchKeyword} filters={filters} setFilters={setFilters} setSearchKeyword={setSearchKeyword} />
       {(item.status == 'fetching' || item.status == 'idle') && <IconSpinLoading sx={{ fontSize: '100px', mt: 10 }} />}
       {item.status == 'failed' && (
+        
         <Typography variant="h6" sx={{ mt: 10, textAlign: 'center' }}>
           {t('views.homepage.search.noResult')}
         </Typography>
