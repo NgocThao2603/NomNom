@@ -5,8 +5,9 @@
       "help": "ヘルプ",
       "login": "ログイン",
       "signup": "登録",
-      "profile": "プロフィール",
+      "settings": "設定",
       "orders": "注文",
+      "ordersHistory": "注文履歴",
       "logout": "ログアウト"
     }
   },
@@ -159,6 +160,24 @@
       },
       "orderPage": {
         "alert": "注文が完了しました！"
+      }
+    },
+    "orderHistory": {
+      "components": {
+        "orderHistory": "注文履歴",
+        "rate": "評価",
+        "rated": "評価済み",
+        "confirmedAt": "確認日時",
+        "comment": "コメント",
+        "submit": "提出"
+      },
+      "orderHistoryPage": {
+        "noOrder": "注文が見つかりません。"
+      }
+    },
+    "setting": {
+      "components": {
+        "button": "保存"
       }
     }
   }

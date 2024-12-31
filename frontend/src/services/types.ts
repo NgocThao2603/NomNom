@@ -52,3 +52,12 @@ export type Favorite = {
     data: FavoriteItem[];
   };
 };
+export type UserInfo = {
+  user_id: number;
+  username: string;
+  email: string;
+  image: string;
+  avatar: string;
+  address: string;
+  phone: string;
+};

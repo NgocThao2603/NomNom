@@ -39,8 +39,8 @@ export async function getCart() {
   return response.data.data[0];
 }
 
-export async function placeOrder(dish_ids: number[]) {
-  return await axios.post(getApi('/order/place'), { dish_ids }, { withCredentials: true });
+export async function placeOrder(dish_ids: number[], quantities: number[]) {
+  return await axios.post(getApi('/order/place'), { dish_ids, quantities }, { withCredentials: true });
 }
 
 export async function deleteCartItem(id: number) {
@@ -72,7 +72,7 @@ export async function postRating(body: any) {
 }
 
 export async function login(email: string, password: string) {
-  return await axios.post(getApi('/user/login'), { email, password });
+  return await axios.post(getApi('/user/login'), { email, password }, { withCredentials: true });
 }
 
 export async function signup(email: string, username: string, password: string) {
@@ -86,3 +86,15 @@ export async function logout() {
 export const refreshAccessToken = async () => {
   return await axios.post(getApi(`/user/refresh_token`), {}, { withCredentials: true });
 };
+
+export async function getUserInfo() {
+  return await axios.get(getApi(`/user/profile`), { withCredentials: true });
+}
+
+export async function updateUserInfo(body: any) {
+  return await axios.put(getApi(`/user/profile`), body, { withCredentials: true });
+}
+
+export async function updateAvatar(body: any) {
+  return await axios.post(getApi(`/api/files`), body, { withCredentials: true });
+}

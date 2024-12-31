@@ -5,8 +5,9 @@
       "help": "Help",
       "login": "Login",
       "signup": "Signup",
-      "profile": "Profile",
+      "settings": "Settings",
       "orders": "Orders",
+      "ordersHistory": "Orders History",
       "logout": "Logout"
     }
   },
@@ -161,6 +162,24 @@
       },
       "orderPage": {
         "alert": "Order completed!"
+      }
+    },
+    "orderHistory": {
+      "components": {
+        "orderHistory": "Order History",
+        "rate": "Rate",
+        "rated": "Rated",
+        "confirmedAt": "Confirmed at",
+        "comment": "Comment",
+        "submit": "Submit"
+      },
+      "orderHistoryPage": {
+        "noOrder": "No order found."
+      }
+    },
+    "setting": {
+      "components": {
+        "button": "Save"
       }
     }
   }

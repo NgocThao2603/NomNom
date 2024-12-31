@@ -10,6 +10,7 @@ import FavoritePage from './views/favoritepage/FavoritePage';
 import OrderHistory from './views/order-history/OrderHistory';
 import LoginPage from './views/login/LoginPage';
 import SignupPage from './views/signup/SignupPage';
+import Settings from './views/settings/Settings';
 
 export default function RouterUrl() {
   return useRoutes([
@@ -56,6 +57,10 @@ export default function RouterUrl() {
         {
           path: 'order-history',
           element: <OrderHistory />,
+        },
+        {
+          path: 'settings',
+          element: <Settings />,
         },
         { path: '', element: <Navigate to={'/home'} /> },
       ],
