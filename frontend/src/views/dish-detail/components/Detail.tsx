@@ -13,6 +13,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
 import { addDishToCart, addDishToFavorite } from 'src/services/index';
+import { useAuth } from '../../../contexts/AuthContext';
 
 interface DetailProps {
   id: number;
@@ -29,35 +30,60 @@ interface DetailProps {
 const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calories, price, address, description, favorite }) => {
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
+  const [tempInput, setTempInput] = useState<string>('1');
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
-  console.log('aaa', isFavorited);
+  console.log('aaa');
+
+  // const handleFavoriteToggle = async () => {
+  //   try {
+  //     await addDishToFavorite('1', id.toString());
+  //     setIsFavorited(!favorite);
+  //   } catch (error) {
+  //     console.error('Error adding to favorite:', error);
+  //   }
+  const { updateTotalDishes } = useCartContext();
 
   const handleFavoriteToggle = async () => {
-    try {
-      await addDishToFavorite('1', id.toString());
-      setIsFavorited(!favorite);
-    } catch (error) {
-      console.error('Error adding to favorite:', error);
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    } else {
+      try {
+        await addDishToFavorite(id.toString());
+        setIsFavorited(!isFavorited);
+      } catch (error) {
+        console.error('Error adding to favorite:', error);
+      }
     }
   };
 
   const increaseQuantity = () => {
-    setQuantity((prev) => (prev < 99 ? prev + 1 : prev));
+    setQuantity((prev) => {
+      const newQuantity = prev < 99 ? prev + 1 : prev;
+      setTempInput(newQuantity.toString());
+      return newQuantity;
+    });
   };
 
   const decreaseQuantity = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
+    setQuantity((prev) => {
+      const newQuantity = prev > 1 ? prev - 1 : prev;
+      setTempInput(newQuantity.toString());
+      return newQuantity;
+    });
   };
 
-  const { updateTotalDishes } = useCartContext();
-
   const addToCart = async () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     try {
-      const user_id = '1';
-      const response = await addDishToCart(user_id, id, quantity);
+      const response = await addDishToCart(id, quantity);
       const totalDishes = response.data.totalDish[0]?.[0]?.total_dishes;
       updateTotalDishes(totalDishes);
       setOpenSnackbar(true);
@@ -71,6 +97,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   };
 
   const handleOpenDialog = () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     setOpenDialog(true);
   };
 
@@ -79,6 +109,10 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   };
 
   const handleConfirmBuyNow = async () => {
+    if (!loggedIn) {
+      navigate('/login');
+      return;
+    }
     setOpenDialog(false);
     try {
       await addToCart();
@@ -145,19 +179,35 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
                 </IconButton>
                 <input
                   type="number"
-                  value={quantity}
+                  value={tempInput}
                   onChange={(e) => {
-                    const value = Number(e.target.value);
-                    if (!isNaN(value) && value >= 1 && value <= 99) {
-                      setQuantity(value);
-                    } else if (value > 99) {
-                      setQuantity(99);
+                    const value = e.target.value;
+                    if (value === '') {
+                      setTempInput('');
+                    } else {
+                      const numericValue = Number(value);
+                      if (!isNaN(numericValue) && numericValue >= 1 && numericValue <= 99) {
+                        setTempInput(value);
+                        setQuantity(numericValue);
+                      }
+                    }
+                  }}
+                  onBlur={() => {
+                    if (tempInput === '') {
+                      setTempInput(quantity.toString());
                     }
                   }}
                   max={99}
-                  style={{ width: '80px', height: '40px', textAlign: 'center', padding: '0', border: 'none', borderRadius: '25px', fontSize: '16px' }}
+                  style={{
+                    width: '80px',
+                    height: '40px',
+                    textAlign: 'center',
+                    padding: '0',
+                    border: 'none',
+                    borderRadius: '25px',
+                    fontSize: '16px',
+                  }}
                 />
-
                 <IconButton onClick={increaseQuantity}>
                   <AddIcon sx={{ color: 'green' }} />
                 </IconButton>
@@ -189,7 +239,6 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
         </Alert>
       </Snackbar>
 
-      {/* Dialog for Buy Now confirmation */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>{t('views.dish-detail.components.detail.buyNow.confirmTitle')}</DialogTitle>
         <DialogContent>
@@ -199,7 +248,6 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
           <Button onClick={handleCloseDialog} variant="contained" color="error">
             {t('views.dish-detail.components.detail.buyNow.cancel')}
           </Button>
-
           <Button onClick={handleConfirmBuyNow} variant="contained" autoFocus>
             {t('views.dish-detail.components.detail.buyNow.confirm')}
           </Button>

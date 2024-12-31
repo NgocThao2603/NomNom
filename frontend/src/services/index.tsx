@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getApi } from './utils';
+import './axiosInterceptor';
 
 export async function getItemByKeyword(keyword: string) {
   return await axios.get(getApi(`/api/dishes/search?q=${keyword}`));
@@ -25,54 +26,63 @@ export async function getFeedback(id: string | undefined) {
   return await axios.get(getApi(`/api/dishes/feedback/${id}`));
 }
 
-export async function deleteDishFromCart(user_id: string, dish_id: string) {
-  return await axios.post(getApi(`/cart`), { user_id, dish_id });
+export async function deleteDishFromCart(dish_id: string) {
+  return await axios.post(getApi(`/cart`), { dish_id }, { withCredentials: true });
 }
 
-export async function addDishToCart(user_id: string, dish_id: number, quantity: number) {
-  return await axios.post(getApi('/cart'), { user_id, dish_id, quantity });
+export async function addDishToCart(dish_id: number, quantity: number) {
+  return await axios.post(getApi('/cart'), { dish_id, quantity }, { withCredentials: true });
 }
 
-export async function getCartByUserId(userId: string) {
-  const response = await axios.get(getApi(`/cart?user_id=${userId}`));
+export async function getCart() {
+  const response = await axios.get(getApi(`/cart`), { withCredentials: true });
   return response.data.data[0];
 }
 
-export async function placeOrder(user_id: number, dish_ids: number[]) {
-  return await axios.post(getApi('/order/place'), { user_id, dish_ids });
+export async function placeOrder(dish_ids: number[]) {
+  return await axios.post(getApi('/order/place'), { dish_ids }, { withCredentials: true });
 }
 
-export async function deleteCartItem(user_id: number, id: number) {
-  return await axios.delete(getApi(`/cart?user_id=${user_id}&dish_id=${id}`));
+export async function deleteCartItem(id: number) {
+  return await axios.delete(getApi(`/cart?dish_id=${id}`), { withCredentials: true });
 }
 
-export async function getOrders(user_id: string) {
-  return await axios.get(getApi(`/order/${user_id}`));
+export async function getOrders() {
+  return await axios.get(getApi(`/order/`), { withCredentials: true });
 }
 
 export async function confirmOrder(order_ids: number[]) {
-  return await axios.post(getApi(`/order/confirm`), { order_ids });
+  return await axios.post(getApi(`/order/confirm`), { order_ids }, { withCredentials: true });
 }
-export async function addDishToFavorite(user_id: string, dish_id: string) {
-  return await axios.post(getApi(`/favorite`), { user_id, dish_id });
+export async function addDishToFavorite(dish_id: string) {
+  return await axios.post(getApi(`/favorite`), { dish_id }, { withCredentials: true });
 }
-export async function getDishFavorite(user_id: string) {
-  return await axios.get(getApi(`/favorite/${user_id}`));
+export async function getDishFavorite() {
+  return await axios.get(getApi(`/favorite`), { withCredentials: true });
 }
-export async function deleteDishFavorite(user_id: string, dish_id: string) {
-  return await axios.delete(getApi(`/favorite?user_id=${user_id}&dish_id=${dish_id}`));
+export async function deleteDishFavorite(dish_id: string) {
+  return await axios.delete(getApi(`/favorite?dish_id=${dish_id}`), { withCredentials: true });
 }
-export async function getOrdersHistoryByUserId(user_id: number) {
-  return await axios.get(getApi(`/order/history/${user_id}`));
+export async function getOrdersHistory() {
+  return await axios.get(getApi(`/order/history`), { withCredentials: true });
 }
 
 export async function postRating(body: any) {
-  return await axios.post(getApi('/order/rate'), body);
+  return await axios.post(getApi('/order/rate'), body, { withCredentials: true });
 }
 
 export async function login(email: string, password: string) {
   return await axios.post(getApi('/user/login'), { email, password });
 }
+
 export async function signup(email: string, username: string, password: string) {
   return await axios.post(getApi('/user/signup'), { email, username, password });
 }
+
+export async function logout() {
+  return await axios.post(getApi('/user/logout'), {}, { withCredentials: true });
+}
+
+export const refreshAccessToken = async () => {
+  return await axios.post(getApi(`/user/refresh_token`), {}, { withCredentials: true });
+};

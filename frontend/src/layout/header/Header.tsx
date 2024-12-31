@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Select, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { logout } from 'src/services/index.tsx';
 import { useAuth } from '../../contexts/AuthContext'; // Import AuthContext
 import { useTranslation } from 'react-i18next';
 
@@ -13,6 +14,11 @@ export default function Header() {
   const { t, i18n } = useTranslation();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  useEffect(() => {
+    if (!loggedIn) {
+      setAnchorEl(null); // Đảm bảo menu đóng khi trạng thái đăng nhập thay đổi
+    }
+  }, [loggedIn]);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget as HTMLElement); // Đảm bảo kiểu đúng
@@ -22,9 +28,21 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    setLoggedIn(false); // Thay đổi trạng thái đăng nhập
-    navigate('/login'); // Điều hướng về trang login
+  const handleLogout = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('accessToken');
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+      setLoggedIn(false);
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Logout failed:', error);
+      // Xóa accessToken và điều hướng dù có lỗi
+      localStorage.removeItem('accessToken');
+      document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+      setLoggedIn(false);
+      navigate('/login');
+    }
   };
 
   const handleNavigateToFavorites = () => {

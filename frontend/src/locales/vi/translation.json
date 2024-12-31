@@ -57,6 +57,25 @@
         "noResult": "Không tìm thấy kết quả."
       }
     },
+    "login": {
+      "title": "ĐĂNG NHẬP",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "button": "Đăng nhập",
+      "loginWithGoogle": "hoặc đăng nhập bằng",
+      "noAccount": "Chưa có tài khoản?",
+      "signup": "Đăng ký"
+    },
+    "signup": {
+      "title": "ĐĂNG KÝ",
+      "email": "Email",
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "button": "Đăng ký",
+      "loginWithGoogle": "hoặc đăng nhập bằng",
+      "haveAccount": "Đã có tài khoản?",
+      "login": "Đăng nhập"
+    },
     "dish-detail": {
       "components": {
         "detail": {

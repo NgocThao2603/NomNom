@@ -18,7 +18,7 @@ export default function AllItem({ Item }: { Item: Item }) {
         <Grid container spacing={2}>
           {Item.data.map((item) => (
             <Grid item xs={6} sm={4} md={2.4} key={item.id}>
-              <CardItem id={item.id} name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={item.average_rating} distance={item.distance} />
+              <CardItem id={item.id} name={item.dish_name} price={item.price * 1000} img_url={item.img_url} average_rating={parseFloat(item.average_rating)} distance={item.distance} />
             </Grid>
           ))}
         </Grid>

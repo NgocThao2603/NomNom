@@ -57,6 +57,25 @@
         "noResult": "結果が見つかりませんでした。"
       }
     },
+    "login": {
+      "title": "ログイン",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "button": "ログイン",
+      "loginWithGoogle": "または以下でログイン",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "signup": "登録"
+    },
+    "signup": {
+      "title": "登録",
+      "email": "メールアドレス",
+      "username": "ユーザー名",
+      "password": "パスワード",
+      "button": "登録",
+      "loginWithGoogle": "または以下でログイン",
+      "haveAccount": "すでにアカウントをお持ちですか？",
+      "login": "ログイン"
+    },
     "dish-detail": {
       "components": {
         "detail": {
