@@ -18,7 +18,7 @@ export default function FavoritePage() {
   };
   return (
     <Box>
-      <Box sx={{ my: 3, borderRadius: '10px', borderColor: 'grey.500', border: 1, p: 2, width: 'fit-content' }}>
+      <Box sx={{ my: 3, width: 'fit-content' }}>
         <Typography variant="h3">My Favorite Foods</Typography>
       </Box>
       {(items.status === 'fetching' || items.status === 'idle') && <IconSpinLoading sx={{ fontSize: '100px', mt: 10 }} />}

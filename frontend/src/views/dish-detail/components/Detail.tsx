@@ -12,7 +12,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
 import { useCartContext } from 'src/contexts/cart-context/CartContext';
-import { addDishToCart, addDishToFavorite } from 'src/services/index';
+import { addDishToCart, addDishToFavorite, deleteDishFavorite } from 'src/services/index';
 import { useAuth } from '../../../contexts/AuthContext';
 
 interface DetailProps {
@@ -31,10 +31,11 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState<number>(1);
   const [tempInput, setTempInput] = useState<string>('1');
-  const [isFavorited, setIsFavorited] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { loggedIn } = useAuth();
+  const [isFavorited, setIsFavorited] = useState<boolean>(favorite);
+
   const navigate = useNavigate();
   console.log('aaa');
 
@@ -51,13 +52,16 @@ const Detail: React.FC<DetailProps> = ({ id, image, name, average_rating, calori
     if (!loggedIn) {
       navigate('/login');
       return;
-    } else {
-      try {
+    }
+    try {
+      if (isFavorited) {
+        await deleteDishFavorite(id.toString());
+      } else {
         await addDishToFavorite(id.toString());
-        setIsFavorited(!isFavorited);
-      } catch (error) {
-        console.error('Error adding to favorite:', error);
       }
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
     }
   };
 

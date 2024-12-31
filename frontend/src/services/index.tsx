@@ -61,7 +61,7 @@ export async function getDishFavorite() {
   return await axios.get(getApi(`/favorite`), { withCredentials: true });
 }
 export async function deleteDishFavorite(dish_id: string) {
-  return await axios.delete(getApi(`/favorite?dish_id=${dish_id}`), { withCredentials: true });
+  return await axios.delete(getApi(`/favorite`), { data: { dish_id }, withCredentials: true });
 }
 export async function getOrdersHistory() {
   return await axios.get(getApi(`/order/history`), { withCredentials: true });

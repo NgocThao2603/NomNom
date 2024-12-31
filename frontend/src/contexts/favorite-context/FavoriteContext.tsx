@@ -32,7 +32,7 @@ export const FavoriteProvider = ({ children }: { children: React.ReactNode }) =>
         },
       });
 
-      const response = await getDishFavorite('1');
+      const response = await getDishFavorite();
       setItem({
         status: 'success',
         data: {
