@@ -9,7 +9,6 @@ import { IconSpinLoading } from 'src/assets/icon';
 type DishListProps = {
   dishes: Ordered_Dish_With_Status;
   onRate: (id: number, rating: number, comment: string) => void;
-  fetchOrderHistory: () => void;
 };
 
 const boxStyle = {
@@ -20,12 +19,12 @@ const boxStyle = {
   height: '100%',
 };
 
-export default function DishList({ dishes, onRate, fetchOrderHistory }: DishListProps) {
+export default function DishList({ dishes, onRate }: DishListProps) {
   const { t, i18n } = useTranslation();
   const { openModal } = useModalContext();
 
   const handleOpenModal = (dish: Ordered_Dish) => {
-    openModal(`${dish.name}`, <RateModal onSubmit={(rating, comment) => handleSubmit(dish, rating, comment)} fetchOrderHistory={fetchOrderHistory} />, { maxWidth: 'xs' });
+    openModal(`${dish.name}`, <RateModal onSubmit={(rating, comment) => handleSubmit(dish, rating, comment)} />, { maxWidth: 'xs' });
   };
 
   const handleSubmit = (dish: Ordered_Dish, rating: number, comment: string) => {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getOrdersHistory, postRating } from 'src/services';
 import DishList from './components/DishList';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 export interface Ordered_Dish {
   order_id: number;
@@ -47,6 +48,7 @@ export default function OrderHistory() {
         comment,
       };
       await postRating(body);
+      fetchOrderHistory();
     } catch (error) {
       console.error(error);
     }
@@ -60,7 +62,7 @@ export default function OrderHistory() {
       <Typography variant="h3" my={3}>
         {t('views.orderHistory.components.orderHistory')}
       </Typography>
-      <DishList dishes={dishes} onRate={handleRate} fetchOrderHistory={fetchOrderHistory} />
+      <DishList dishes={dishes} onRate={handleRate} />
     </>
   );
 }
