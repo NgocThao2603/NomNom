@@ -113,12 +113,14 @@ export default function OrderPage() {
       setOpenSnackbar(true);
     } else {
       const dishIds = selectedItems.map((dish) => dish.id);
+      const quantities = dishIds.map((id) => counts[id]); // Tạo mảng quantities từ counts
+
       try {
-        await placeOrder(dishIds);
-        updateTotalDishes(0);
-        navigate('/order');
+        await placeOrder(dishIds, quantities); // Truyền hai mảng dishIds và quantities
+        updateTotalDishes(0); // Cập nhật lại số lượng món ăn trong giỏ hàng
+        navigate('/order'); // Chuyển hướng đến trang đặt hàng
       } catch (error) {
-        console.error('Error placing order:', error);
+        console.error('Error placing order:', error); // Hiển thị lỗi nếu có
       }
     }
   };
